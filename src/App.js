@@ -4,7 +4,7 @@ import noteService from "./services/notes";
 const App = (props) => {
   const [notes, setNotes] = useState([]);
   const [showAll, setShowAll] = useState(true);
-  const [newNote, setNewNote] = useState("a new note...");
+  const [newNote, setNewNote] = useState("");
 
   const hook = () => {
     noteService.getAll().then((initialNotes) => {
@@ -70,7 +70,11 @@ const App = (props) => {
         ))}
       </ul>
       <form onSubmit={addNote}>
-        <input value={newNote} onChange={handleNoteChange} />
+        <input
+          value={newNote}
+          placeholder="a new note..."
+          onChange={handleNoteChange}
+        />
         <button type="submit">save</button>
       </form>
     </div>

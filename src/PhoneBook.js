@@ -1,28 +1,49 @@
-import { useState } from "react";
-const App = () => {
-  const [persons, setPersons] = useState([
-    { name: "Arto Hellas", number: "040-123456", id: 1 },
-    { name: "Ada Lovelace", number: "39-44-5323523", id: 2 },
-    { name: "Dan Abramov", number: "12-43-234345", id: 3 },
-    { name: "Mary Poppendieck", number: "39-23-6423122", id: 4 },
-  ]);
+import { useState, useEffect } from "react";
+import personService from "./services/persons";
+const App = (props) => {
+  const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [searchName, setSearchName] = useState("");
+
+  const hook = () => {
+    personService.getAll().then((init) => [setPersons(init)]);
+  };
+  useEffect(hook, []);
   const addPerson = (event) => {
     event.preventDefault();
+    // change the name/number
     if (persons.find((person) => person.name === newName)) {
-      alert(`${newName} is already added to phone-book`);
-    }
-    if (newName !== "" && newNumber !== "") {
+      // alert(`${newName} is already added to phone-book`);
+      const t_person = persons.find((person) => person.name === newName);
+      const changedPerson = {
+        ...t_person,
+        number: newNumber,
+      };
+      personService
+        .update(t_person.id, changedPerson)
+        .then((returnedPerson) => {
+          setPersons(
+            persons.map((person) =>
+              person.id !== returnedPerson.id ? person : changedPerson
+            )
+          );
+          setNewName("");
+          setNewNumber("");
+        });
+      alert("change success");
+    } else if (newName !== "" && newNumber !== "") {
       const newPerson = {
         name: newName,
         number: newNumber,
         id: persons.length + 1,
       };
-      setPersons(persons.concat(newPerson));
-      setNewName("");
-      setNewNumber("");
+      personService.create(newPerson).then((returnedPerson) => {
+        setPersons(persons.concat(returnedPerson));
+        setNewName("");
+        setNewNumber("");
+      });
+      alert("add success");
     }
   };
   const personToSearch =
@@ -41,8 +62,18 @@ const App = () => {
     console.log(event.target.value);
     setNewNumber(event.target.value);
   }
+  function handleDelete(id) {
+    // eslint-disable-next-line no-restricted-globals
+    if (confirm("Are you sure you want to delete")) {
+      const targetPerson = persons.find((person) => person.id === id);
+      console.log("targetPerson :>> ", targetPerson);
+      personService.remove(targetPerson.id);
+      setPersons(persons.filter((person) => person.id !== id));
+    }
+  }
+
   return (
-    <div>
+    <div style={props.style}>
       <h2>Phonebook</h2>
       <span>
         filter name <input value={searchName} onChange={handleSearchChange} />
@@ -64,9 +95,12 @@ const App = () => {
       </form>
       <h2>Numbers</h2>
       {personToSearch.map((person, index) => (
-        <h3 key={index}>
-          {person.name} {person.number}
-        </h3>
+        <div key={index}>
+          <h3>
+            {person.name} {person.number}
+          </h3>
+          <button onClick={() => handleDelete(person.id)}>delete</button>
+        </div>
       ))}
     </div>
   );
