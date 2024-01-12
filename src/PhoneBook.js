@@ -1,15 +1,17 @@
 import { useState, useEffect } from "react";
 import personService from "./services/persons";
+import Notification from "./components/Notification";
 const App = (props) => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [searchName, setSearchName] = useState("");
-
-  const hook = () => {
+  const [message, setMessage] = useState("");
+  const [errorState, setErrorState] = useState(false);
+  const init = () => {
     personService.getAll().then((init) => [setPersons(init)]);
   };
-  useEffect(hook, []);
+  useEffect(init, []);
   const addPerson = (event) => {
     event.preventDefault();
     // change the name/number
@@ -28,22 +30,38 @@ const App = (props) => {
               person.id !== returnedPerson.id ? person : changedPerson
             )
           );
+          setMessage("success");
+          setTimeout(() => {
+            setMessage(null);
+          }, 5000);
+        })
+        .finally(() => {
           setNewName("");
           setNewNumber("");
         });
-      alert("change success");
+      // alert("change success");
     } else if (newName !== "" && newNumber !== "") {
       const newPerson = {
         name: newName,
         number: newNumber,
         id: persons.length + 1,
       };
-      personService.create(newPerson).then((returnedPerson) => {
-        setPersons(persons.concat(returnedPerson));
-        setNewName("");
-        setNewNumber("");
-      });
-      alert("add success");
+      personService
+        .create(newPerson)
+        .then((returnedPerson) => {
+          setPersons(persons.concat(returnedPerson));
+          setMessage("success");
+          setTimeout(() => {
+            setMessage(null);
+          }, 5000);
+        })
+        .finally(() => {
+          setNewName("");
+          setNewNumber("");
+        });
+
+      // alert("add success");
+    } else {
     }
   };
   const personToSearch =
@@ -62,18 +80,50 @@ const App = (props) => {
     console.log(event.target.value);
     setNewNumber(event.target.value);
   }
-  function handleDelete(id) {
+  function handleDelete(name) {
     // eslint-disable-next-line no-restricted-globals
     if (confirm("Are you sure you want to delete")) {
-      const targetPerson = persons.find((person) => person.id === id);
-      console.log("targetPerson :>> ", targetPerson);
-      personService.remove(targetPerson.id);
-      setPersons(persons.filter((person) => person.id !== id));
+      const targetPerson = persons.find((person) => person.name === name);
+      if (targetPerson) {
+        console.log("targetPerson :>> ", targetPerson);
+        personService
+          .remove(targetPerson.id)
+          .then((response) => {
+            console.log("name :>> ", name);
+            setPersons(
+              persons.filter((person) => person.id !== targetPerson.id)
+            );
+          })
+          .catch((err) => {
+            // 本地有远端没有
+            if (err.response.status === 404) {
+              setErrorState(true);
+              setMessage(name + "has removed!");
+              setTimeout(() => {
+                setErrorState(false);
+                setMessage(null);
+              }, 5000);
+            } else {
+              setErrorState(true);
+              setMessage("unknown error!" + err.response.status);
+              setTimeout(() => {
+                setErrorState(false);
+                setMessage(null);
+              }, 5000);
+            }
+          })
+          .finally(() => {
+            setPersons(
+              persons.filter((person) => person.id !== targetPerson.id)
+            );
+          });
+      }
     }
   }
 
   return (
     <div style={props.style}>
+      <Notification message={message} isError={errorState} />
       <h2>Phonebook</h2>
       <span>
         filter name <input value={searchName} onChange={handleSearchChange} />
@@ -99,7 +149,7 @@ const App = (props) => {
           <h3>
             {person.name} {person.number}
           </h3>
-          <button onClick={() => handleDelete(person.id)}>delete</button>
+          <button onClick={() => handleDelete(person.name)}>delete</button>
         </div>
       ))}
     </div>
