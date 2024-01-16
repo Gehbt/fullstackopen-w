@@ -7,7 +7,7 @@ const App = (props) => {
   const [notes, setNotes] = useState([]);
   const [showAll, setShowAll] = useState(true);
   const [newNote, setNewNote] = useState("");
-  const [errorMessage, setErrorMessage] = useState("some error happened...");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const hook = () => {
     noteService.getAll().then((initialNotes) => {

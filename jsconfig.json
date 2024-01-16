@@ -1,4 +1,9 @@
 {
+  "references": [
+    {
+      "path": "./jsconfig.backend.json"
+    }
+  ],
   "compilerOptions": {
     "module": "ESNext",
     "moduleResolution": "Node",

@@ -3,4 +3,5 @@
     "fullstackopen"
   ],
   "editor.formatOnSave": true,
+  "commentTranslate.targetLanguage": "zh-CN",
 }

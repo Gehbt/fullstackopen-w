@@ -20,8 +20,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "server": "json-server -p3001 --watch db.json",
-    "server.person": "json-server -p3001 --watch db-person.json"
+    "server": "json-server -p3005 --watch db.json",
+    "server.person": "json-server -p3005 --watch db-person.json",
+    "server.be": "yarn --cwd .\\backend run dev"
   },
   "eslintConfig": {
     "extends": [

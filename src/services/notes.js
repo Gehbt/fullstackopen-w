@@ -1,8 +1,13 @@
 import axios from "axios";
-const baseUrl = "http://localhost:3001/notes";
-
+const baseUrl = "http://localhost:3001/api/notes";
+axios.defaults.headers.get["Accept"] = "*/*";
 const getAll = async () => {
-  const request = axios.get(baseUrl);
+  const request = axios.get(baseUrl, {
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Headers": "*",
+    },
+  });
   const response = await request;
   return response.data;
 };
