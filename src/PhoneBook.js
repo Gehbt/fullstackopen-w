@@ -39,7 +39,7 @@ const App = (props) => {
           setNewName("");
           setNewNumber("");
         });
-      // alert("change success");
+      alert("change success");
     } else if (newName !== "" && newNumber !== "") {
       const newPerson = {
         name: newName,
@@ -60,7 +60,7 @@ const App = (props) => {
           setNewNumber("");
         });
 
-      // alert("add success");
+      alert("add success");
     } else {
     }
   };

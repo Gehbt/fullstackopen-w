@@ -1,7 +1,7 @@
 {
-  "cSpell.words": [
-    "fullstackopen"
-  ],
+  "cSpell.words": ["fullstackopen", "malformatted"],
   "editor.formatOnSave": true,
   "commentTranslate.targetLanguage": "zh-CN",
+  "workbench.colorTheme": "One Dark Pro Mix",
+  "oneDarkPro.editorTheme": "One Dark Pro Mix"
 }

@@ -6,13 +6,12 @@
     "allowJs": true,
     "alwaysStrict": true,
     "outDir": "./dist",
-    "baseUrl": "."
+    "baseUrl": "./backend",
+    "paths": {
+      "~/*": ["./backend/*"]
+    },
+    "resolveJsonModule": true
   },
-  "include": [
-    "backend"
-  ],
-  "exclude": [
-    "node_modules",
-    "**/node_modules/*"
-  ]
+  "include": ["backend", "backend/*.json"],
+  "exclude": ["node_modules", "**/node_modules/*"]
 }

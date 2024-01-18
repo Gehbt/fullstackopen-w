@@ -8,21 +8,27 @@
     "@testing-library/user-event": "^14.5.2",
     "alova": "^2.16.2",
     "axios": "^1.6.3",
+    "concurrently": "^8.2.2",
+    "http-proxy-middleware": "^2.0.6",
     "json-server": "^0.17.4",
+    "npm-run-all2": "^6.1.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
     "web-vitals": "^3.5.1"
   },
   "scripts": {
-    "dev": "react-scripts start",
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "dev": "concurrently --names \"FE,BE\" -c \"bgBlue.bold,bgMagenta.bold\" \"yarn:start\" \"yarn:start.be\"",
+    "start.be": "yarn --cwd .\\backend run dev",
+    "dev-p": "run-p dev dev.be",
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
     "eject": "react-scripts eject",
+    "analyze": "source-map-explorer 'build/static/js/*.js'",
     "server": "json-server -p3005 --watch db.json",
     "server.person": "json-server -p3005 --watch db-person.json",
-    "server.be": "yarn --cwd .\\backend run dev"
+    "re": "yarn --cwd .\\backend run echo"
   },
   "eslintConfig": {
     "extends": [
@@ -41,5 +47,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@react-dev-inspector/middleware": "^2.0.1",
+    "customize-cra": "^1.0.0",
+    "react-app-rewired": "^2.2.1"
   }
 }
