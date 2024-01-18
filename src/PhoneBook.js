@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import personService from "./services/persons";
 import Notification from "./components/Notification";
+import { setWithReset } from "./tools";
 const App = (props) => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
@@ -30,10 +31,11 @@ const App = (props) => {
               person.id !== returnedPerson.id ? person : changedPerson
             )
           );
-          setMessage("success");
-          setTimeout(() => {
-            setMessage(null);
-          }, 5000);
+          setWithReset(setMessage, "success");
+        })
+        .catch((error) => {
+          setWithReset(setMessage, error.response.data);
+          setWithReset(setErrorState, true);
         })
         .finally(() => {
           setNewName("");
@@ -50,18 +52,15 @@ const App = (props) => {
         .create(newPerson)
         .then((returnedPerson) => {
           setPersons(persons.concat(returnedPerson));
-          setMessage("success");
-          setTimeout(() => {
-            setMessage(null);
-          }, 5000);
+          setWithReset(setMessage, "success");
         })
         .finally(() => {
           setNewName("");
           setNewNumber("");
+          alert("add success");
         });
-
-      alert("add success");
     } else {
+      console.log("todo? :>> ");
     }
   };
   const personToSearch =
@@ -96,20 +95,11 @@ const App = (props) => {
           })
           .catch((err) => {
             // 本地有远端没有
+            setWithReset(setErrorState, true);
             if (err.response.status === 404) {
-              setErrorState(true);
-              setMessage(name + "has removed!");
-              setTimeout(() => {
-                setErrorState(false);
-                setMessage(null);
-              }, 5000);
+              setWithReset(setMessage, name + "has removed!");
             } else {
-              setErrorState(true);
-              setMessage("unknown error!" + err.response.status);
-              setTimeout(() => {
-                setErrorState(false);
-                setMessage(null);
-              }, 5000);
+              setWithReset(setMessage, "unknown error!" + err.response.status);
             }
           })
           .finally(() => {

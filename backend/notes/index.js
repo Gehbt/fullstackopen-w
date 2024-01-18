@@ -38,7 +38,7 @@ export function createNotesServer(app) {
       });
   });
   // Post
-  app.post("/api/notes", async (request, response) => {
+  app.post("/api/notes", async (request, response, next) => {
     const body = request.body;
     if (!body.content) {
       return response.status(400).json({ error: "content missing" });
@@ -55,21 +55,17 @@ export function createNotesServer(app) {
       .then((savedNote) => {
         response.json(savedNote);
       })
-      .catch(console.error);
+      .catch((error) => next(error));
   });
   // Put
   app.put("/api/notes/:id", (request, response, next) => {
-    const body = request.body;
-
-    const note = {
-      content: body.content,
-      important: body.important,
-    };
-
-    Note.findByOneAndUpdate({ id: Number(request.params.id) }, note, {
-      // 调用时获得了修改后的文档而非原始文档
-      new: true,
-    })
+    const { content, important } = request.body;
+    // 当findOneAndUpdate被执行时，默认不运行验证
+    Note.findOneAndUpdate(
+      { id: Number(request.params.id) },
+      { content, important },
+      { new: true, runValidators: true, context: "query" }
+    )
       .then((updatedNote) => {
         response.json(updatedNote);
       })

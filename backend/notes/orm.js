@@ -17,7 +17,7 @@ Promise.all(promise_notes)
   .then(() => {
     Note.find({})
       .then((notes) => {
-        notes.map((note) => {
+        notes.forEach((note) => {
           console.log(note);
         });
       })

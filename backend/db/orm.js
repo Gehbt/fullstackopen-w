@@ -28,4 +28,5 @@ const noteSchema = new mongoose.Schema({
   important: Boolean,
 });
 // 建立模型类
+// eslint-disable-next-line no-unused-vars
 const Note = mongoose.model("Note", noteSchema);

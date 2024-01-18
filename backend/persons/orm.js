@@ -11,7 +11,7 @@ Promise.all(promise_persons)
   .then(() => {
     Person.find({})
       .then((persons) => {
-        persons.map((person) => {
+        persons.forEach((person) => {
           console.log(person);
         });
       })
