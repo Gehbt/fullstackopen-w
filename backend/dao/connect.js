@@ -1,21 +1,17 @@
 import mongoose from "mongoose";
-import path from "path";
-import dotenv from "dotenv";
+import env from "~/utils/env.js";
+import logger from "~/utils/logger.js";
 
-export const mkConnect = (ModelName) => {
-  const { DB_PASSWORD, DB_NAME, MONGODB_URI } = dotenv.config({
-    path: path.resolve(process.cwd(), ".env.local"),
-  }).parsed;
-
-  const url = `mongodb+srv://${DB_NAME}:${DB_PASSWORD}@${MONGODB_URI}/fullstack?retryWrites=true&w=majority`;
+export const mkConnect = () => {
+  const url = `mongodb+srv://${env.DB_NAME}:${env.DB_PASSWORD}@${env.MONGODB_URI}/fullstack?retryWrites=true&w=majority`;
 
   mongoose
     .connect(url)
     .then((result) => {
-      console.log("connected to MongoDB", `/${ModelName}`);
+      logger.info("connected to MongoDB");
     })
     .catch((error) => {
-      console.log("error connecting to MongoDB:", error.message);
+      logger.error("error connecting to MongoDB:", error.message);
     });
   return 0;
 };

@@ -1,0 +1,16 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "shell",
+      "label": "Run this .ts/.js by `tsx`",
+      "command": "tsx",
+      "args": ["${relativeFile}"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "detail": "run .ts"
+    }
+  ]
+}

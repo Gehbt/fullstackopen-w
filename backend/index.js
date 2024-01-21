@@ -1,37 +1,10 @@
-import express from "express";
-import cors from "cors";
-import { createPersonServer } from "./persons/index.js";
-import { createNotesServer } from "./notes/index.js";
-import { errorHandler, unknownEndpoint } from "./middleware/error.js";
-
-const app = express();
-// 接收数据
-app.use(express.json());
-app.use(cors());
-app.use(express.static("../build"));
-
-app.get("/", (request, response) => {
-  response.send("<h1>Hello World!</h1>");
-});
-app.get("/api", (request, response) => {
-  response.send(/* html */ `<div style="display:flex;flex-direction: column; place-items: center; gap:12px;">
-    <h2>now we have</h2>
-      <div>
-        <a href="/api/persons">/api/persons<a>
-      </div>
-      <div>
-        <a href="/api/notes">/api/notes<a/>
-      </div>
-    </div>`);
-});
-
-createNotesServer(app);
-createPersonServer(app);
-
-app.use(unknownEndpoint);
-app.use(errorHandler);
+import app from "~/app/index.js";
+import http from "http";
+import logger from "~/utils/logger.js";
+import env from "~/utils/env.js";
+const server = http.createServer(app);
 /// fin.
-const PORT = 3001;
-app.listen(PORT, () => {
-  console.log(`Server running on port http://localhost:${PORT}`);
+const PORT = env.PORT || 3001;
+server.listen(PORT, () => {
+  logger.info(`Server running on port http://localhost:${PORT}`);
 });

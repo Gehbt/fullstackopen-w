@@ -1,7 +1,7 @@
-import { mkConnect } from "../dao/connect.js";
 import mongoose from "mongoose";
+import logger from "~/utils/logger.js";
 const reg_phone = /^(?:(?:\d{2,3}-)?\d{8}|^(?:\d{4}-)?\d{6,9})(?:-\d+)?$/;
-mkConnect("personApp");
+logger.info("-->>/personApp");
 const personSchema = new mongoose.Schema({
   id: {
     type: Number,

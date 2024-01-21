@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import Note from "./models.js";
-import Init_Notes from "../db-note.json";
+import Init_Notes from "~/db-note.json";
 
 // 删除全部
 // Note.deleteMany().then((result) => {

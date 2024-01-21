@@ -51,6 +51,7 @@
   },
   "devDependencies": {
     "@react-dev-inspector/middleware": "^2.0.1",
+    "@tsconfig/create-react-app": "^2.0.2",
     "@typescript-eslint/parser": "^6.19.0",
     "customize-cra": "^1.0.0",
     "react-app-rewired": "^2.2.1",

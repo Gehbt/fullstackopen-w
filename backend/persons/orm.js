@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import Person from "./models.js";
-import Init_Persons from "../db-person.json";
+import Init_Persons from "~/db-person.json";
 
 const promise_persons = Init_Persons.persons.map(async (person) => {
   const result = await new Person(person).save();

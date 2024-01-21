@@ -1,5 +1,14 @@
 {
-  "cSpell.words": ["fullstackopen", "malformatted"],
+  "cSpell.words": ["fullstackopen", "malformatted", "pino"],
+  "cSpell.ignorePaths": [
+    "package-lock.json",
+    "node_modules",
+    "vscode-extension",
+    ".git/objects",
+    ".vscode",
+    ".vscode-insiders",
+    "tests"
+  ],
   "editor.formatOnSave": true,
   "commentTranslate.targetLanguage": "zh-CN",
   "workbench.colorTheme": "One Dark Pro Mix",

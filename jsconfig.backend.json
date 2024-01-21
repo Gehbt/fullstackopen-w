@@ -8,7 +8,7 @@
     "outDir": "./dist",
     "baseUrl": "./backend",
     "paths": {
-      "~/*": ["./backend/*"]
+      "~/*": ["./*"]
     },
     "resolveJsonModule": true
   },
