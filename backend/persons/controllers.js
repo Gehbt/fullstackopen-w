@@ -37,6 +37,9 @@ personsRouter.get("/:id", (request, response, next) => {
 personsRouter.delete("/:id", (request, response, next) => {
   Person.findOneAndDelete({ id: Number(request.params.id) })
     .then((result) => {
+      if (!result) {
+        response.status(404).end();
+      }
       response.status(204).end();
     })
     .catch((error) => {

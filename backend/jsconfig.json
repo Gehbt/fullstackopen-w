@@ -1,3 +1,6 @@
 {
-  "extends": "../jsconfig.backend.json"
+  "extends": "../jsconfig.backend.json",
+  "compilerOptions": {
+    "types": ["@types/jest"]
+  }
 }

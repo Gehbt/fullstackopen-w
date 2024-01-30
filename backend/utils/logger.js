@@ -48,5 +48,5 @@
 //     // }),
 //   ],
 // });
-import logger from "./logger-test.js";
+import logger from "./logger-pino.js";
 export default logger;

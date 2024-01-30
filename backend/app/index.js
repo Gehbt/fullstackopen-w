@@ -8,7 +8,8 @@ import { mkConnect } from "~/dao/connect.js";
 // import { requestLogger } from "~/middleware/logger.js";
 import favicon from "serve-favicon";
 import path from "path";
-
+import blogsRouter from "~/blogs/controllers.js";
+// import "express-async-errors"; // 去除catch (exception) {next(exception)}(仅能)
 const app = express();
 // 接收数据
 mkConnect();
@@ -17,7 +18,13 @@ app.use(cors());
 app.use(express.static("../../build"));
 app.use(express.json());
 // app.use(requestLogger);
-app.use(pino_http());
+app.use(
+  pino_http({
+    transport: {
+      target: "pino-pretty",
+    },
+  })
+);
 
 app.get("/", (request, response) => {
   response.send("<h1>Hello World!</h1>");
@@ -38,6 +45,7 @@ app.get("/api", (request, response) => {
 
 app.use("/api/notes", notesRouter);
 app.use("/api/persons", personRouter);
+app.use("/api/blogs", blogsRouter);
 app.use(errorHandler);
 app.use(unknownEndpoint);
 

@@ -1,5 +1,5 @@
 {
-  "cSpell.words": ["fullstackopen", "malformatted", "pino"],
+  "cSpell.words": ["fullstackopen", "malformatted", "Phonebook", "pino"],
   "cSpell.ignorePaths": [
     "package-lock.json",
     "node_modules",
@@ -12,5 +12,7 @@
   "editor.formatOnSave": true,
   "commentTranslate.targetLanguage": "zh-CN",
   "workbench.colorTheme": "One Dark Pro Mix",
-  "oneDarkPro.editorTheme": "One Dark Pro Mix"
+  "oneDarkPro.editorTheme": "One Dark Pro Mix",
+  "jest.rootPath": "./backend",
+  "typescript.tsdk": "node_modules\\typescript\\lib"
 }

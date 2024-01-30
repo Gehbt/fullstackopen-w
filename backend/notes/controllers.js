@@ -6,10 +6,9 @@ const notesRouter = express.Router();
 // 每个Express应用都有一个内置的应用路由器。
 
 // Get all
-notesRouter.get("/", (request, response) => {
-  Note.find({}).then((notes) => {
-    response.json(notes);
-  });
+notesRouter.get("/", async (request, response) => {
+  const notes = await Note.find({});
+  response.json(notes);
 });
 // Get one
 notesRouter.get("/:id", (request, response, next) => {
@@ -32,6 +31,9 @@ notesRouter.get("/:id", (request, response, next) => {
 notesRouter.delete("/:id", (request, response, next) => {
   Note.findOneAndDelete({ id: Number(request.params.id) })
     .then((result) => {
+      if (!result) {
+        response.status(404).end();
+      }
       response.status(204).end();
     })
     .catch((error) => {
@@ -55,7 +57,7 @@ notesRouter.post("/", async (request, response, next) => {
   newNote
     .save()
     .then((savedNote) => {
-      response.json(savedNote);
+      response.status(201).json(savedNote);
     })
     .catch((error) => {
       logger.error("notes/controllers::notesRouter.post");
