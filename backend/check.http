@@ -10,3 +10,18 @@ POST http://localhost:3001/api/notes
 Content-Type: application/json; charset=utf-8
 
 {"content": "poist"}
+
+
+### GET user
+GET http://localhost:3001/api/users/
+
+### POST notes
+POST http://localhost:3001/api/notes/
+Content-Type: application/json; charset=utf-8
+
+{
+  "content":"post test",
+  "important":true,
+  "userId":111,
+  "id": 221222
+}

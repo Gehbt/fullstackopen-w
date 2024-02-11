@@ -28,7 +28,7 @@ const App = (props) => {
         setErrorMessage(
           `Note '${note.content}' was already removed from server`
         );
-        setTimeout(() => {
+        window.setTimeout(() => {
           setErrorMessage(null);
         }, 5000);
         setNotes(notes.filter((n) => n.id !== id));

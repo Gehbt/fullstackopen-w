@@ -1,11 +1,11 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
-ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
+createRoot(document.getElementById("root")).render(
+  <StrictMode>
     <App
       style={{
         padding: "5rem",
@@ -16,7 +16,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         textAlign: "center",
       }}
     />
-  </React.StrictMode>
+  </StrictMode>
 );
 
 // const promise2 = axios.get("http://localhost:3001/foobar");

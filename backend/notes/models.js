@@ -16,9 +16,13 @@ const noteSchema = new mongoose.Schema({
   },
   date: {
     type: Date,
-    required: true,
+    required: false,
   },
   important: { type: Boolean, default: false },
+  user: {
+    type: Number,
+    ref: "User",
+  },
 });
 
 noteSchema.set("toJSON", {

@@ -7,3 +7,4 @@ export const requestLogger = (request, _, next) => {
   logger.info("-----");
   next();
 };
+export default console;

@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
 import Note from "./models.js";
 import Init_Notes from "~/db-note.json";
-
+import { mkConnect } from "~/dao/connect.js";
+mkConnect();
 // 删除全部
 // Note.deleteMany().then((result) => {
 //   console.log("fin", result);

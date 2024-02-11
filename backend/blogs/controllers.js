@@ -22,9 +22,12 @@ blogsRouter.post("/", async (request, response) => {
 });
 blogsRouter.delete("/:url", async (request, response, next) => {
   try {
-    const result = await Blog.findOneAndDelete({
-      url: "/" + request.params.url,
-    });
+    const result = await Blog.findOneAndDelete(
+      {
+        url: "/" + request.params.url,
+      },
+      { context: "query" }
+    );
     if (!result) {
       response.status(404).end();
     }

@@ -9,6 +9,7 @@ import { mkConnect } from "~/dao/connect.js";
 import favicon from "serve-favicon";
 import path from "path";
 import blogsRouter from "~/blogs/controllers.js";
+import usersRouter from "~/users/controllers.js";
 // import "express-async-errors"; // 去除catch (exception) {next(exception)}(仅能)
 const app = express();
 // 接收数据
@@ -46,6 +47,7 @@ app.get("/api", (request, response) => {
 app.use("/api/notes", notesRouter);
 app.use("/api/persons", personRouter);
 app.use("/api/blogs", blogsRouter);
+app.use("/api/users", usersRouter);
 app.use(errorHandler);
 app.use(unknownEndpoint);
 

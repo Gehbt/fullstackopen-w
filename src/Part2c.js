@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-const App = (props) => {
+const App = ({ style }) => {
   const [query, setQuery] = useState("");
   const [res, setRes] = useState([]);
   const [msg, setMsg] = useState("");
@@ -40,7 +40,7 @@ const App = (props) => {
     setQuery(e.target.value);
   }
   return (
-    <div style={props.style}>
+    <div style={style}>
       <h1>query</h1>
       <input value={query} onChange={handleChange} />
       <ul>
