@@ -2,7 +2,9 @@
   "$schema": "https://json.schemastore.org/nodemon.json",
   "verbose": true,
   "ignore": ["node_modules"],
-  "watch": ["*.js", "*.json"],
+  "watch": ["./**/*.js", "./**/*.json"],
   "ext": "js json",
-  "exec": "tsx --tsconfig ./jsconfig.json ./index.js"
+  "exec": "tsx --tsconfig ./jsconfig.json ./index.js",
+  "signal": "SIGINT",
+  "delay": 2500
 }
