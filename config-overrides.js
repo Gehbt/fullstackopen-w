@@ -22,6 +22,13 @@ module.exports = {
 
   webpack: override(
     disableEsLint(),
-    parseInt(process.env.BUNDLE_VISUALIZE) === 1 && addBundleVisualizer()
+    Number.parseInt(process.env.BUNDLE_VISUALIZE) === 1 && addBundleVisualizer()
   ),
 };
+// const kill = require("tree-kill");
+
+// const pid = process.pid;
+process.on("SIGINT", function () {
+  // kill(pid, "SIGINT");
+  process.exit(0);
+});

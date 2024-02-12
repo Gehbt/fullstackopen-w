@@ -2,7 +2,7 @@
   "name": "fullstackopen-w",
   "version": "0.1.0",
   "private": true,
-  "type": "module",
+  "type": "commonjs",
   "dependencies": {
     "@testing-library/jest-dom": "^6.1.6",
     "@testing-library/react": "^14.1.2",
@@ -17,10 +17,11 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
+    "tree-kill": "^1.2.2",
     "web-vitals": "^3.5.1"
   },
   "scripts": {
-    "dev": "concurrently --names \"FE,BE\" -c \"bgBlue.bold,bgMagenta.bold\" \"yarn:start\" \"yarn:start.be\"",
+    "dev": "concurrently --kill-others --kill-signal \"SIGINT\" --names \"FE,BE\" -c \"bgBlue.bold,bgMagenta.bold\" \"yarn:start\" \"yarn:start.be\"",
     "start.be": "yarn --cwd .\\backend run dev",
     "dev-p": "run-p dev dev.be",
     "start": "react-app-rewired start",

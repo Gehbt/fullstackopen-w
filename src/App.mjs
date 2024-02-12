@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import Note from "./components/Note";
-import noteService from "./services/notes";
-import Notification from "./components/Notification";
-import Footer from "./components/Footer";
+import Note from "./components/Note.mjs";
+import noteService from "./services/notes.mjs";
+import Notification from "./components/Notification.mjs";
+import Footer from "./components/Footer.mjs";
 const App = (props) => {
   const [notes, setNotes] = useState([]);
   const [showAll, setShowAll] = useState(true);
@@ -24,7 +24,7 @@ const App = (props) => {
       .then((returnNotes) => {
         setNotes(notes.map((note) => (note.id !== id ? note : returnNotes)));
       })
-      .catch((error) => {
+      .catch(() => {
         setErrorMessage(
           `Note '${note.content}' was already removed from server`
         );
