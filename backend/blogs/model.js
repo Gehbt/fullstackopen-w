@@ -1,9 +1,24 @@
 import mongoose from "mongoose";
 const blogSchema = new mongoose.Schema({
-  title: String,
-  author: String,
-  url: String,
-  likes: Number,
+  title: {
+    type: String,
+    require: true,
+  },
+  author: {
+    type: String,
+  },
+  url: {
+    type: String,
+    require: true,
+  },
+  likes: {
+    type: Number,
+    default: 0,
+  },
+  users: {
+    type: Number,
+    ref: "User",
+  },
 });
 
 blogSchema.set("toJSON", {

@@ -6,7 +6,7 @@ const userSchema = new Schema({
   id: Number,
   username: String,
   name: String,
-  passwordHash: String,
+  passwordHash: { type: String, required: true },
   notes: [
     {
       type: Number,

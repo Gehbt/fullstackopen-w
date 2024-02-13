@@ -96,3 +96,7 @@ test("update successfully", async () => {
   const hasUpdatedBlog = blogs.body.find((blog) => blog.title === "title2+");
   expect(!!hasUpdatedBlog).toBe(true);
 });
+/**
+ * TODO: add test for new version
+ *
+ */

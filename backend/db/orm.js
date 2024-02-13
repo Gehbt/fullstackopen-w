@@ -1,10 +1,7 @@
 import mongoose from "mongoose";
-import path from "path";
-import dotenv from "dotenv";
+import env from "~/utils/env.js";
 
-const { DB_PASSWORD, DB_NAME } = dotenv.config({
-  path: path.resolve(process.cwd(), ".env.local"),
-}).parsed;
+const { DB_PASSWORD, DB_NAME } = env;
 
 const url = `mongodb+srv://${DB_NAME}:${DB_PASSWORD}@cluster0.c9s0ico.mongodb.net/noteApp?retryWrites=true&w=majority`;
 

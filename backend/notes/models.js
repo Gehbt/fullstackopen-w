@@ -19,7 +19,7 @@ const noteSchema = new mongoose.Schema({
     required: false,
   },
   important: { type: Boolean, default: false },
-  user: {
+  users: {
     type: Number,
     ref: "User",
   },

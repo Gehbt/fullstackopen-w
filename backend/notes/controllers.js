@@ -2,7 +2,11 @@ import logger from "~/utils/logger.js";
 import Note from "./models.js";
 import express from "express";
 import User from "~/users/models.js";
+import jwt from "jsonwebtoken";
+import env from "~/utils/env.js";
+const { SECRET } = env;
 const notesRouter = express.Router();
+
 // 一个路由器对象是一个孤立的中间件和路由实例。你可以把它看作是一个 "小型应用"，只能够执行中间件和路由功能。
 // 每个Express应用都有一个内置的应用路由器。
 
@@ -48,8 +52,18 @@ notesRouter.post("/", async (request, response, next) => {
     const body = request.body;
     if (!body.content) {
       response.status(400).json({ error: "content missing" }).end();
+      return;
     }
-    const user = await User.findOne({ id: body.userId });
+    console.log("body.token :>> ", request.token);
+    // with jwt
+
+    const decodedToken = jwt.verify(request.token, SECRET);
+    console.log("decodedToken :>> ", decodedToken);
+    if (!decodedToken.id) {
+      response.status(401).json({ error: "token missing or invalid" }).end();
+      return;
+    }
+    const user = await User.findOne({ id: decodedToken.id });
     const newNote = new Note({
       id: body.id ?? (await Note.find({}).then((notes) => notes.length)) + 1,
       content: body.content,

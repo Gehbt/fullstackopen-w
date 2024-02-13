@@ -13,15 +13,58 @@ Content-Type: application/json; charset=utf-8
 
 
 ### GET user
-GET http://localhost:3001/api/users/
+GET http://localhost:3001/api/users
+
+### POST user
+POST http://localhost:3001/api/users
+Content-Type: application/json; charset=utf-8
+
+{
+  "id": 112,
+  "username": "root2",
+  "name": "Superuser2",
+  "password": "mluukkai"
+}
 
 ### POST notes
 POST http://localhost:3001/api/notes/
 Content-Type: application/json; charset=utf-8
 
 {
-  "content":"post test",
-  "important":true,
-  "userId":111,
-  "id": 221222
+  "content": "post test",
+  "important": true,
+  "userId": 111,
+  "id":  221222
 }
+
+### POST login
+POST http://localhost:3001/api/login/
+Content-Type: application/json; charset=utf-8
+
+{
+  "username": "root2",
+  "password": "mluukkai"
+}
+
+### POST with jwt
+POST http://localhost:3001/api/notes/
+Content-Type: application/json; charset=utf-8
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QyIiwiaWQiOjExMiwiaWF0IjoxNzA3NzUwMTE1fQ.NanIopMniisukdvY82M1Ii3zn6Fx5Oc3FjpMdkIYIh4
+
+{
+  "content": "root2 post",
+  "important": true
+}
+
+### POST blog with jwt
+POST http://localhost:3001/api/blogs/
+Content-Type: application/json; charset=utf-8
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QyIiwiaWQiOjExMiwiaWF0IjoxNzA3NzUwMTE1fQ.NanIopMniisukdvY82M1Ii3zn6Fx5Oc3FjpMdkIYIh4
+
+{
+  "title": "Javascript is hard2",
+  "url":"/js2"
+}
+
+### GET blog
+GET http://localhost:3001/api/blogs/

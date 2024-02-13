@@ -2,6 +2,7 @@
 import { mkConnect } from "~/dao/connect.js";
 import User from "./models.js";
 import mongoose from "mongoose";
+import bcrypt from "bcrypt";
 mkConnect();
 const userList = [
   {
@@ -17,11 +18,16 @@ const userList = [
     password: "salainen",
   },
 ];
-// mkConnect();
 
 const promiseArr = userList.map(async (user) => {
-  const savedUser = await new User(user).save();
-
+  const saltRounds = 10;
+  const passwordHash = await bcrypt.hash(user.password, saltRounds);
+  const newUser = new User(
+    Object.assign(user, {
+      passwordHash,
+    })
+  );
+  const savedUser = await newUser.save();
   console.log("savedUser :>> ", savedUser);
 });
 
