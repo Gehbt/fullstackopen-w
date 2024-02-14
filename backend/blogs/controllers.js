@@ -10,11 +10,12 @@ const blogsRouter = express.Router();
 
 blogsRouter.get("/", async (request, response, next) => {
   try {
-    const blogs = await Blog.find({}).populate(
-      "users",
-      { username: 1, id: 1, name: 1 },
-      User
-    );
+    const blogs = await Blog.find({});
+    // .populate(
+    //   "users",
+    //   { username: 1, id: 1, name: 1 },
+    //   User
+    // );
     // ?TODO 1: 修改列出所有博客，使创建者的用户信息与博客一起显示。]
     // ?TODO 2: 列出所有用户，同时显示每个用户创建的博客。
     response.json(blogs);
@@ -27,10 +28,10 @@ blogsRouter.get("/", async (request, response, next) => {
 blogsRouter.post("/", async (request, response) => {
   const blog = new Blog(request.body);
 
-  if (blog.likes === undefined) {
+  if (!blog.likes) {
     blog.likes = 0;
   }
-  if (blog.title === undefined && blog.url === undefined) {
+  if (!blog.title || !blog.url) {
     return response.status(400);
   }
 

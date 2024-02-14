@@ -1,5 +1,11 @@
 {
-  "cSpell.words": ["fullstackopen", "malformatted", "Phonebook", "pino"],
+  "cSpell.words": [
+    "fullstackopen",
+    "malformatted",
+    "Noteapp",
+    "Phonebook",
+    "pino"
+  ],
   "cSpell.ignorePaths": [
     "package-lock.json",
     "node_modules",
