@@ -1,7 +1,7 @@
 import { connection } from "mongoose";
 import supertest from "supertest";
-import app from "~/app/index.js";
-import Blog from "~/blogs/model.js";
+import app from "../app/index.js";
+import Blog from "../blogs/model.js";
 
 const api = supertest(app);
 const blogList = [

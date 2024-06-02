@@ -4,7 +4,9 @@
     "malformatted",
     "Noteapp",
     "Phonebook",
-    "pino"
+    "pino",
+    "swcrc",
+    "TTFB"
   ],
   "cSpell.ignorePaths": [
     "package-lock.json",
@@ -21,5 +23,16 @@
   "oneDarkPro.editorTheme": "One Dark Pro Mix",
   "jest.rootPath": "./backend",
   "typescript.tsdk": "node_modules\\typescript\\lib",
-  "jest.autoRun": "off"
+  "jest.runMode": "on-demand",
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.patterns": {
+    "*.ts": "${capture}.js",
+    "*.js": "${capture}.js.map, ${capture}.min.js, ${capture}.d.ts",
+    "*.jsx": "${capture}.js",
+    "*.tsx": "${capture}.ts",
+    "tsconfig.json": "tsconfig.*.json",
+    "package.json": "package-lock.json, yarn.lock, pnpm-lock.yaml, bun.lockb",
+    "jsconfig.json": "jsconfig*.json"
+  },
+  "eslint.experimental.useFlatConfig": true
 }

@@ -32,7 +32,7 @@ const App = ({ style }) => {
     if (query) {
       const promise = axios.get(`https://restcountries.com/v3.1/name/${query}`);
       promise.then(eventHandler).catch((err) => {
-        console.error(err);
+        console.error("Part2c", err);
       });
     }
   }, [query]);

@@ -2,6 +2,9 @@ import axios from "axios";
 const baseUrl = "/api/blogs";
 
 axios.defaults.headers.get["Accept"] = "*/*";
+/**
+ * @type {string | null}
+ */
 let token = null;
 
 const setToken = (newToken) => {

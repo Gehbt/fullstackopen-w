@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, Fragment } from "react";
+import { useState, useEffect } from "react";
 import Note from "./components/Note.jsx";
 import Blog from "./components/Blog.jsx";
 import noteService from "./services/notes.mjs";

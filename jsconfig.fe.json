@@ -1,25 +1,20 @@
 {
   "extends": "@tsconfig/create-react-app/tsconfig.json",
-  "references": [
-    {
-      "path": "./jsconfig.be.json"
-    },
-    {
-      "path": "./jsconfig.dev-tool.json"
-    }
-  ],
   "compilerOptions": {
+    "composite": true,
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "target": "ES2020",
-    "jsx": "react-jsx",
-    "allowImportingTsExtensions": true,
+    "allowJs": true,
     "strict": true,
-    "baseUrl": ".",
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "esModuleInterop": true,
+    "baseUrl": "./src",
     "paths": {
       "@/*": [
-        "src/*"
-      ],
+        "./*"
+      ]
     }
   },
   "include": [

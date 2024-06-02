@@ -2,37 +2,56 @@
   "name": "fullstackopen-w",
   "version": "0.1.0",
   "private": true,
-  "type": "commonjs",
+  "type": "module",
   "dependencies": {
+    "@babel/core": "^7.24.6",
+    "@babel/preset-react": "^7.24.6",
+    "@eslint-react/eslint-plugin": "^1.5.12",
+    "@swc/core": "^1.5.7",
     "@testing-library/jest-dom": "^6.1.6",
     "@testing-library/react": "^14.1.2",
     "@testing-library/user-event": "^14.5.2",
-    "alova": "^2.16.2",
-    "axios": "^1.6.3",
+    "@types/customize-cra": "^1.0.8",
+    "@types/webpack-bundle-analyzer": "^4.7.0",
+    "@vitest/ui": "^1.6.0",
+    "axios": "^1.7.2",
+    "babel-loader": "^9.1.3",
     "concurrently": "^8.2.2",
-    "eslint-plugin-react": "^7.33.2",
+    "cross-env": "^7.0.3",
+    "esbuild-loader": "^4.1.0",
+    "file-loader": "^6.2.0",
     "http-proxy-middleware": "^2.0.6",
-    "json-server": "^0.17.4",
-    "npm-run-all2": "^6.1.1",
+    "json-server": "^1.0.0-beta.0",
+    "npm-run-all2": "^6.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
+    "style-loader": "^4.0.0",
+    "swc-loader": "^0.2.6",
     "tree-kill": "^1.2.2",
-    "web-vitals": "^3.5.1"
+    "vitest": "^1.6.0",
+    "web-vitals": "3.5.1",
+    "webpack": "^5.91.0",
+    "webpack-bundle-analyzer": "^4.10.2",
+    "webpack-dev-server": "^5.0.4",
+    "webpack-manifest-plugin": "^5.0.0"
   },
   "scripts": {
     "dev": "concurrently --kill-others --kill-signal \"SIGINT\" --names \"FE,BE\" -c \"bgBlue.bold,bgMagenta.bold\" \"yarn:start\" \"yarn:start.be\"",
     "start.be": "yarn --cwd .\\backend run dev",
     "dev-p": "run-p dev dev.be",
-    "start": "react-app-rewired start",
+    "new-dev": "webpack serve --mode development",
+    "new-build": "webpack --mode development",
+    "start": "cross-env PORT=3000 react-app-rewired start",
     "build": "react-app-rewired build",
-    "test": "react-app-rewired test",
+    "postinstall": "npx jest -h",
+    "test": "cross-env NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\"  react-app-rewired test --setupFilesAfterEnv ./src/setupTests.js",
     "eject": "react-scripts eject",
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "server": "json-server -p3005 --watch db.json",
     "server.person": "json-server -p3005 --watch db-person.json",
     "re": "yarn --cwd .\\backend run echo",
-    "lint": "eslint ."
+    "lint": "eslint ./src"
   },
   "eslintIgnore": [
     "node_modules",
@@ -51,13 +70,51 @@
     ]
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.24.6",
     "@react-dev-inspector/middleware": "^2.0.1",
-    "@tsconfig/create-react-app": "^2.0.2",
+    "@tsconfig/create-react-app": "^2.0.4",
     "@types/supertest": "^6.0.2",
-    "@typescript-eslint/parser": "^6.19.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "babel-jest": "^29.7.0",
+    "copy-webpack-plugin": "^12.0.2",
+    "css-loader": "^7.1.2",
     "customize-cra": "^1.0.0",
-    "eslint": "^8.56.0",
+    "eslint": "^9.3.0",
+    "eslint-plugin-jest-dom": "^5.4.0",
+    "eslint-plugin-react": "^7.34.1",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-react-refresh": "^0.4.7",
+    "html-loader": "^5.0.0",
+    "html-webpack-plugin": "^5.6.0",
+    "jest": "^29.7.0",
     "react-app-rewired": "^2.2.1",
-    "typescript": "^5.3.3"
-  }
+    "react-test-renderer": "^18.3.1",
+    "typescript": "^5.4.5",
+    "webpack-cli": "^5.1.4"
+  },
+  "jest": {
+    "extensionsToTreatAsEsm": [
+      ".jsx"
+    ],
+    "transform": {
+      "\\.jsx?$": "babel-jest"
+    },
+    "transformIgnorePatterns": [
+      "node_modules/(?!axios/)"
+    ],
+    "setupFilesAfterEnv": [
+      "./src/setupTests.js"
+    ],
+    "moduleNameMapper": {
+      "@/(.*)": "./src/$1"
+    },
+    "moduleDirectories": [
+      "node_modules",
+      "src"
+    ],
+    "modulePathIgnorePatterns": [
+      "<rootDir>/backend"
+    ]
+  },
+  "packageManager": "yarn@1.22.19+sha1.4ba7fc5c6e704fce2066ecbfb0b0d8976fe62447"
 }

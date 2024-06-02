@@ -5,13 +5,21 @@
     "moduleResolution": "node16",
     "allowJs": true,
     "alwaysStrict": true,
-    "outDir": "./dist",
     "baseUrl": "./backend",
     "paths": {
-      "~/*": ["./*"]
+      "~/*": [
+        "./*"
+      ]
     },
+    "outDir": "./build",
     "resolveJsonModule": true
   },
-  "include": ["backend", "backend/*.json"],
-  "exclude": ["node_modules", "**/node_modules/*"]
+  "include": [
+    "backend",
+    "backend/*.json"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/node_modules/*"
+  ]
 }

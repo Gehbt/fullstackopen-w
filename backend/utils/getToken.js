@@ -1,4 +1,5 @@
-/** @type {import("express").RequestHandler} */
+import express from "express";
+/** @type {express.RequestHandler} */
 export const getTokenFrom = (request) => {
   const authorization = request.get("authorization");
   if (authorization && authorization.toLowerCase().startsWith("bearer ")) {

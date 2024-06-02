@@ -7,11 +7,11 @@ import * as middleware from "~/middleware/index.js";
 import { mkConnect } from "~/dao/connect.js";
 // import { requestLogger } from "~/middleware/logger.js";
 import favicon from "serve-favicon";
-import path from "path";
+import path from "node:path";
 import blogsRouter from "~/blogs/controllers.js";
 import usersRouter from "~/users/controllers.js";
 import loginRouter from "~/users/login.controllers.js";
-// import "express-async-errors"; // 去除catch (exception) {next(exception)}(仅能)
+// import "express-async-errors"; // 去除 catch (exception) {next(exception)}(仅能)
 const app = express();
 // 接收数据
 mkConnect();
@@ -34,8 +34,9 @@ app.get("/", (request, response) => {
 
 app.use(favicon(path.join(process.cwd(), "assets", "favicon.ico")));
 app.get("/api", (request, response) => {
-  response.send(/* html */ `<div style="display:flex;flex-direction: column; place-items: center; gap:12px;">
-    <h2>now we have</h2>
+  response.send(/* html */`
+    <div style="display:flex;flex-direction: column; place-items: center; gap:12px;">
+      <h2>now we have</h2>
       <div>
         <a href="/api/persons">/api/persons<a>
       </div>

@@ -8,7 +8,7 @@ const { SECRET } = env;
 const notesRouter = express.Router();
 
 // 一个路由器对象是一个孤立的中间件和路由实例。你可以把它看作是一个 "小型应用"，只能够执行中间件和路由功能。
-// 每个Express应用都有一个内置的应用路由器。
+// 每个 Express 应用都有一个内置的应用路由器。
 
 // Get all
 notesRouter.get("/", async (request, response) => {
@@ -84,7 +84,7 @@ notesRouter.post("/", async (request, response, next) => {
 // Put
 notesRouter.put("/:id", (request, response, next) => {
   const { content, important } = request.body;
-  // 当findOneAndUpdate被执行时，默认不运行验证
+  // 当 findOneAndUpdate 被执行时，默认不运行验证
   Note.findOneAndUpdate(
     { id: Number(request.params.id) },
     { content, important },

@@ -1,8 +1,8 @@
 import helper from "./note_test_helper.js";
-import app from "~/app/index.js";
+import app from "../app/index.js";
 import supertest from "supertest";
 import { connection } from "mongoose";
-import User from "~/users/models.js";
+import User from "../users/models.js";
 import bcrypt from "bcrypt";
 const api = supertest(app);
 
@@ -18,7 +18,7 @@ afterAll(async () => {
   await User.deleteMany({});
   connection.close();
 });
-// 测试User
+// 测试 User
 describe("when there is initially one user in db", () => {
   // ...
   test("creation fails with proper statuscode and message if username already taken", async () => {

@@ -1,7 +1,7 @@
 import { connection } from "mongoose";
 import supertest from "supertest";
-import app from "~/app/index.js";
-import Note from "~/notes/models.js";
+import app from "../app/index.js";
+import Note from "../notes/models.js";
 import helper from "./note_test_helper.js";
 
 const api = supertest(app);
@@ -33,13 +33,13 @@ describe("when there is initially some notes saved", () => {
       .expect(200)
       .expect("Content-Type", /application\/json/);
   });
-  // 返回所有note
+  // 返回所有 note
   test("all notes are returned", async () => {
     const response = await api.get("/api/notes");
 
     expect(response.body).toHaveLength(helper.initialNotes.length);
   });
-  // 返回notes里的一篇特殊的note
+  // 返回 notes 里的一篇特殊的 note
   test("a specific note is within the returned notes", async () => {
     const response = await api.get("/api/notes");
 

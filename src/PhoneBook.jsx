@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import personService from "./services/persons.mjs";
-import Notification from "./components/Notification.jsx";
-import { setWithReset } from "./tools/index.mjs";
+import personService from "./services/persons";
+import Notification from "./components/Notification";
+import { setWithReset } from "./tools/index";
 const App = (props) => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
