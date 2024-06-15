@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
-import App from "./App";
-import { act } from "react-dom/test-utils";
+import App from "../App";
+import { act } from "react";
 import { jest, test, expect } from "@jest/globals";
 
 jest.useFakeTimers();

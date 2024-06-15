@@ -1,3 +1,8 @@
+/**
+ * @param {string} message
+ * @param {boolean} isError
+ * @return {JSX.Element|null}
+ */
 const Notification = ({ message, isError }) => {
   if (!message) {
     return null;

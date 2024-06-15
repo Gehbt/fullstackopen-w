@@ -1,3 +1,13 @@
+/**
+ * @typedef {(...args: any[]) => any} AnyFunction
+ * @typedef {(...args: any[]) => void} VoidFunction
+ */
+
+/**
+ * @param {object} props
+ * @param {{author: string,url: string,likes: number}} props.blog - description
+ * @returns
+ */
 const BlogList = ({ blog }) => {
   return (
     <li>
@@ -8,12 +18,24 @@ const BlogList = ({ blog }) => {
     </li>
   );
 };
-
+/**
+ * @param {object} props - The properties passed to the component.
+ * @param {React.FormEventHandler<HTMLFormElement>} props.addBlog - The function to handle the form submission.
+ * @param {{ id:string,url:string,title:string }} props.newBlog - The object containing the new blog data.
+ * @param {({ id:string,url:string,title:string }) => void} props.setNewBlog - The function to update the new blog data.
+ * @param {string} props.username - The username of the blog author.
+ */
 const BlogForm = ({ addBlog, newBlog, setNewBlog, username }) => {
+  /**
+   * @param {React.ChangeEvent<HTMLInputElement>} e
+   */
   const handleTitleChange = (e) => {
     e.preventDefault();
     setNewBlog({ title: e.target.value, url: newBlog.url });
   };
+  /**
+   * @param {React.ChangeEvent<HTMLInputElement>} e
+   */
   const handleUrlChange = (e) => {
     e.preventDefault();
     setNewBlog({ title: newBlog.title, url: e.target.value });
@@ -34,7 +56,10 @@ const BlogForm = ({ addBlog, newBlog, setNewBlog, username }) => {
     </form>
   );
 };
-
+/**
+ * Renders a component that displays a list of blogs.
+ * @param {{ blogs: any[],children: React.ReactNode}} props - The properties passed to the component.
+ */
 const BlogComponent = ({ blogs, children }) => (
   <>
     <h2>Blogs</h2>

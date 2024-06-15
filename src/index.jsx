@@ -4,20 +4,22 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App";
-import reportWebVitals from "./reportWebVitals.js";
+import reportWebVitals from "./reportWebVitals";
+import stylex from "@stylexjs/stylex";
 
+const appStyle = stylex.create({
+  app: {
+    padding: "5rem",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "column",
+    textAlign: "center",
+  },
+});
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <App
-      style={{
-        padding: "5rem",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        flexDirection: "column",
-        textAlign: "center",
-      }}
-    />
+    <App {...stylex.props(appStyle.app)} />
   </StrictMode>
 );
 

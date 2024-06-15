@@ -27,11 +27,11 @@ const getAll = async () => {
   const response = await request;
   return response.data;
 };
-const create = async (newObject) => {
+const create = async (newBlog) => {
   const tokenConfig = {
     headers: { Authorization: token },
   };
-  const request = axios.post(baseUrl, newObject, tokenConfig);
+  const request = axios.post(baseUrl, newBlog, tokenConfig);
   const response = await request;
   return response.data;
 };

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import personService from "./services/persons";
 import Notification from "./components/Notification";
 import { setWithReset } from "./tools/index";
-const App = (props) => {
+const PhoneBookApp = (props) => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
@@ -146,4 +146,4 @@ const App = (props) => {
   );
 };
 
-export default App;
+export default PhoneBookApp;

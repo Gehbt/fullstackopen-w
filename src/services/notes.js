@@ -20,17 +20,17 @@ const getAll = async () => {
   return response.data;
 };
 
-const create = async (newObject) => {
+const create = async (newNote) => {
   const config = {
     headers: { Authorization: token },
   };
-  const request = axios.post(baseUrl, newObject, config);
+  const request = axios.post(baseUrl, newNote, config);
   const response = await request;
   return response.data;
 };
 
-const update = async (id, newObject) => {
-  const request = axios.put(`${baseUrl}/${id}`, newObject);
+const update = async (id, newNote) => {
+  const request = axios.put(`${baseUrl}/${id}`, newNote);
   const response = await request;
   return response.data;
 };

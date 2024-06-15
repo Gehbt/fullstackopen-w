@@ -1,3 +1,12 @@
+/**
+ * @typedef {(...args: any[]) => any} AnyFunction
+ * @typedef {(...args: any[]) => void} VoidFunction
+ */
+/**
+ * @param {object} props
+ * @param {{id: string, content: string, important: boolean}} props.note
+ * @param {() => void)} props.toggleImportance
+ */
 const NoteList = ({ note, toggleImportance }) => {
   const label = note.important ? "make not important" : "make important";
 
@@ -16,8 +25,16 @@ const NoteList = ({ note, toggleImportance }) => {
     </li>
   );
 };
-
+/**
+ * @param {object} props - The properties passed to the component.
+ * @param {React.FormEventHandler<HTMLFormElement>} props.addNote - The function to add a new note.
+ * @param {string} props.newNote - The current value of the new note.
+ * @param {React.Dispatch<React.SetStateAction<string>>} props.setNewNote - The function to set the new note value.
+ */
 const NoteForm = ({ addNote, newNote, setNewNote }) => {
+  /**
+   * @param {React.ChangeEvent<HTMLInputElement>} event
+   */
   const handleNoteChange = (event) => {
     setNewNote(event.target.value);
   };
@@ -34,6 +51,15 @@ const NoteForm = ({ addNote, newNote, setNewNote }) => {
   );
 };
 
+/**
+ *
+ * @param {{
+ *    notes: {id: string,content: string,important: boolean}[],
+ *    toggleImportanceOf: (id: any) => void,
+ *    showAll: boolean,
+ *    setShowAll: () => boolean,
+ *    children: React.ReactNode, }} props
+ */
 const NoteComponent = ({
   notes,
   toggleImportanceOf,

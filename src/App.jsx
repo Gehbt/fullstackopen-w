@@ -1,62 +1,41 @@
-import { useState, useEffect } from "react";
-import Note from "./components/Note.jsx";
-import Blog from "./components/Blog.jsx";
-import noteService from "./services/notes.mjs";
-import blogService from "./services/blogs.mjs";
-import Notification from "./components/Notification.jsx";
-import Footer from "./components/Footer.jsx";
-import loginService from "./services/login.mjs";
+import { useState, useEffect, useRef } from "react";
+import Note from "./components/Note";
+import Blog from "./components/Blog";
+import Notification from "./components/Notification";
+import Footer from "./components/Footer";
+
+import noteService from "./services/notes.js";
+import blogService from "./services/blogs.js";
+import loginService from "./services/login.js";
 import "./App.css";
-const App = (props) => {
-  const [notes, setNotes] = useState([]);
-  const [showAll, setShowAll] = useState(true);
-  const [newNote, setNewNote] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+
+/**
+ * @param {{ handleLogin: (
+ *  e: React.FormEvent<HTMLFormElement>,
+ *  userData: { username: string; password: string }
+ * ) => void}} props
+ */
+const LoginForm = ({ handleLogin }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [user, setUser] = useState(null);
-  const [blogs, setBlogs] = useState([]);
-  const [newBlog, setNewBlog] = useState({
-    title: "",
-    url: "",
-  });
-  const handleLogin = async (event) => {
-    event.preventDefault();
-    try {
-      const loginUser = await loginService.login({
-        username,
-        password,
-      });
-      console.log("loginUser", loginUser);
-      window.localStorage.setItem(
-        "loggedNoteappUser",
-        JSON.stringify(loginUser)
-      );
-      noteService.setToken(loginUser.token);
-      setUser(loginUser);
-      setUsername("");
-      setPassword("");
-    } catch (exception) {
-      setErrorMessage("Wrong credentials");
-      window.setTimeout(() => {
-        setErrorMessage(null);
-      }, 5000);
-    }
-  };
-  const handleLogout = (event) => {
-    event.preventDefault();
-    window.localStorage.setItem("loggedNoteappUser", null);
-    setUser(null);
-  };
-  const LoginForm = () => (
-    <form onSubmit={handleLogin}>
+  return (
+    <form
+      onSubmit={(e) => {
+        handleLogin(e, { username, password });
+        setUsername("");
+        setPassword("");
+      }}
+    >
       <div>
         username
         <input
           type="text"
           value={username}
           name="Username"
-          onChange={({ target }) => setUsername(target.value)}
+          autoComplete="Username"
+          onChange={({ target }) => {
+            setUsername(target.value);
+          }}
         />
       </div>
       <div>
@@ -65,12 +44,64 @@ const App = (props) => {
           type="password"
           value={password}
           name="Password"
+          autoComplete="off"
           onChange={({ target }) => setPassword(target.value)}
         />
       </div>
       <button type="submit">login</button>
     </form>
   );
+};
+const App = (/** @type {React.HTMLAttributes<HTMLDivElement>} */ props) => {
+  const [showAll, setShowAll] = useState(true);
+  const [newNote, setNewNote] = useState("");
+  const [errorMessage, setErrorMessage] = useState(
+    /** @type {string | null} */ ("")
+  );
+
+  const [blogs, setBlogs] = useState(/** @type {unknown[]} TODO */ ([]));
+  const [notes, setNotes] = useState(/** @type {unknown[]} TODO */ ([]));
+  const [user, setUser] = useState(/** @type {{} | null} TODO */ (null));
+  const [newBlog, setNewBlog] = useState({
+    title: "",
+    url: "",
+  });
+  /**
+   * @param {React.FormEvent<HTMLFormElement>} event
+   * @param {object} param
+   * @param {string} param.username
+   * @param {string} param.password
+   */
+  const handleLogin = async (event, { username, password }) => {
+    event.preventDefault();
+    try {
+      const loginUser = await loginService.login({
+        username,
+        password,
+      });
+      /*#__PURE__*/ console.log("loginUser", loginUser);
+      window.localStorage.setItem(
+        "loggedNoteappUser",
+        JSON.stringify(loginUser)
+      );
+      noteService.setToken(loginUser.token);
+      setUser(loginUser);
+    } catch {
+      setErrorMessage("Wrong credentials");
+      window.setTimeout(() => {
+        setErrorMessage(null);
+      }, 5000);
+    }
+  };
+  /**
+   * @param {React.ClickEvent<HTMLButtonElement>} event
+   */
+  const handleLogout = (event) => {
+    event.preventDefault();
+    window.localStorage.setItem("loggedNoteappUser", null);
+    setUser(null);
+  };
+
   const userHook = () => {
     const loggedUserJSON = window.localStorage.getItem("loggedNoteappUser");
     if (loggedUserJSON) {
@@ -91,6 +122,9 @@ const App = (props) => {
       setBlogs(Array.from(initialBlogs));
     });
   };
+  /**
+   * @param {string} id
+   */
   const toggleImportanceOf = (id) => {
     const importNotes = notes.find((n) => n.id === id);
     const changedNote = { ...importNotes, important: !importNotes.important };
@@ -110,10 +144,13 @@ const App = (props) => {
         setNotes(notes.filter((n) => n.id !== id));
       });
   };
-  useEffect(userHook, []);
+  useEffect(userHook, [window.localStorage]);
   useEffect(notesHook, []);
   useEffect(blogHook, []);
   // TODO2: addBlog
+  /**
+   * @type {React.FormEventHandler<HTMLFormElement>} event
+   */
   const addNote = (event) => {
     event.preventDefault();
     const noteObject = {
@@ -128,6 +165,9 @@ const App = (props) => {
       setNewNote("");
     });
   };
+  /**
+   * @type {React.FormEventHandler<HTMLFormElement>} event
+   */
   const addBlog = (event) => {
     event.preventDefault();
     const blogObject = {
@@ -160,7 +200,7 @@ const App = (props) => {
       </h2>
 
       {user === null ? (
-        <LoginForm />
+        <LoginForm handleLogin={handleLogin} />
       ) : (
         <Note.NoteComponent
           notes={notes}
