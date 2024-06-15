@@ -1,24 +1,29 @@
 #!/usr/bin/env node
+// @ts-check
 import {
   override,
   overrideDevServer,
   disableEsLint,
   addBundleVisualizer,
+  addWebpackPlugin,
   addWebpackAlias,
   addBabelPlugins,
   addWebpackModuleRule,
 } from "customize-cra";
 import { launchEditorMiddleware } from "@react-dev-inspector/middleware";
-import { resolve } from "path";
-
-// eslint-disable-next-line no-unused-vars
+import { dirname, resolve } from "path";
+import { TsconfigPathsPlugin } from "tsconfig-paths-webpack-plugin";
 import babel_type from "@babel/core"; // for type
 import babel_preset from "./babel.config.cjs";
+import StylexPlugin from "@stylexjs/webpack-plugin";
+import { fileURLToPath } from "url";
 
+const pwd = import.meta.dirname ?? dirname(fileURLToPath(import.meta.url));
 // * config more
 // https://idayer.com/create-react-app-rewired-guide/
 export const devServer = overrideDevServer((serverConfig) => {
   // https://webpack.js.org/configuration/dev-server/#devserversetupmiddlewares
+  // @ts-expect-error default
   serverConfig.setupMiddlewares = (middlewares) => {
     middlewares.unshift(launchEditorMiddleware);
     return middlewares;
@@ -35,15 +40,61 @@ export const devServer = overrideDevServer((serverConfig) => {
  */
 export function paths(paths, env) {
   // 指向根目录的 test.html
-  paths.dotenv = resolve(__dirname, ".env");
-  paths.appJsConfig = resolve(__dirname, "jsconfig.json");
+  paths.dotenv = resolve(pwd, ".env");
+  paths.appJsConfig = resolve(pwd, "jsconfig.json");
   return paths;
 }
 export const webpack = override(
   disableEsLint(),
-  // addWebpackModuleRule({}),
+  addWebpackModuleRule({
+    test: /\.jsx$/,
+    loader: "esbuild-loader",
+    options: {
+      // JavaScript version to compile to
+      target: "es2020",
+      tsconfig: "./jsconfig.json",
+    },
+  }),
+  // addWebpackModuleRule({
+  //   test: /\.m?js$/,
+  //   exclude: /node_modules/,
+  //   loader: "esbuild-loader",
+  //   options: {
+  //     // JavaScript version to compile to
+  //     target: "es2020",
+  //     tsconfig: "./jsconfig.json",
+  //   },
+  // }),
+  addWebpackPlugin(
+    new TsconfigPathsPlugin({
+      baseUrl: ".",
+      configFile: "./jsconfig.json",
+      extensions: [".js", ".jsx", ".mjs"],
+    })
+  ),
+  // addWebpackPlugin(
+  //   new StylexPlugin({
+  //     filename: "styles.[contenthash].css",
+  //     // get webpack mode and set value for dev
+  //     dev: true,
+  //     // Use statically generated CSS files and not runtime injected CSS.
+  //     // Even in development.
+  //     runtimeInjection: false,
+  //     // optional. default: 'x'
+  //     classNamePrefix: "x",
+  //     // Required for CSS variable support
+  //     unstable_moduleResolution: {
+  //       // type: 'commonJS' | 'haste'
+  //       // default: 'commonJS'
+  //       type: "commonJS",
+  //       // The absolute path to the root directory of your project
+  //       rootDir: resolve(pwd),
+  //     },
+  //   })
+  // ),
+  // @ts-expect-error type error
   addWebpackAlias({
-    [resolve(__dirname, "backend")]: false,
+    [resolve(pwd, "backend")]: false,
   })
   // Number.parseInt(process.env.BUNDLE_VISUALIZE) === 1 && addBundleVisualizer()
 );

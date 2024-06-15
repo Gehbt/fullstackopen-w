@@ -1,0 +1,13 @@
+diff --git a/node_modules/react-app-rewired/bin/index.js b/node_modules/react-app-rewired/bin/index.js
+index 879485e..1e72302 100644
+--- a/node_modules/react-app-rewired/bin/index.js
++++ b/node_modules/react-app-rewired/bin/index.js
+@@ -15,7 +15,7 @@ switch (script) {
+   case 'start':
+   case 'test': {
+     const result = spawn.sync(
+-      'node',
++      'tsx',
+       nodeArgs
+         .concat(require.resolve('../scripts/' + script))
+         .concat(args.slice(scriptIndex + 1)),

@@ -1,4 +1,3 @@
-// eslint-disable-next-line no-unused-vars
 const eslint = require("eslint");
 const eslint_js = require("@eslint/js");
 
@@ -12,7 +11,9 @@ const jest_dom = require("eslint-plugin-jest-dom");
 
 // import react_app from "react-scripts";
 const react_plugin = require("@eslint-react/eslint-plugin");
-/** @type {eslint.Linter.FlatConfig[]} type - description */
+/**
+ * @type {eslint.Linter.FlatConfig[]}
+ */
 const configs = [
   {
     name: "legacy",
@@ -21,9 +22,15 @@ const configs = [
       react: react.configs.all,
     },
     languageOptions: {
+      parser: "@babel/eslint-parser",
       parserOptions: {
+        sourceType: "module",
+        ecmaVersion: "latest",
         ecmaFeatures: {
           jsx: true,
+        },
+        babelOptions: {
+          configFile: "./babel.config.cjs",
         },
       },
       globals: {
@@ -69,21 +76,21 @@ const configs = [
   {
     name: "@override/react_plugin",
     rules: {
-      "@eslint-react/no-class-component": "error",
+      // "@eslint-react/no-class-component": "error",
     },
   },
   {
     name: "js",
-    files: ["./src/**/*.js", "./src/**/*.mjs"],
+    files: ["./src/**/*.js"],
     rules: {
       ...eslint_js.configs.recommended.rules,
       "no-unused-vars": "error",
       eqeqeq: "error",
     },
   },
-  {
-    files: ["src/**/*.spec.*", "src/**/*.test.*"],
-    ...jest_dom.configs["flat/recommended"],
-  },
+  // {
+  //   ...jest_dom.configs["flat/recommended"],
+  //   files: ["src/tests/**/*.spec.*", "src/tests/**/*.test.*"],
+  // },
 ];
 module.exports = configs;

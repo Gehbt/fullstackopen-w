@@ -5,6 +5,8 @@
     "Noteapp",
     "Phonebook",
     "pino",
+    "Stylex",
+    "stylexjs",
     "swcrc",
     "TTFB"
   ],
@@ -34,5 +36,9 @@
     "package.json": "package-lock.json, yarn.lock, pnpm-lock.yaml, bun.lockb",
     "jsconfig.json": "jsconfig*.json"
   },
-  "eslint.experimental.useFlatConfig": true
+  "eslint.experimental.useFlatConfig": true,
+  "eslint.run": "onSave",
+  "eslint.workingDirectories": [
+    "."
+  ]
 }

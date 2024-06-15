@@ -7,7 +7,11 @@ import { BundleAnalyzerPlugin } from "webpack-bundle-analyzer";
 import CopyPlugin from "copy-webpack-plugin";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import { WebpackManifestPlugin } from "webpack-manifest-plugin";
+import nodeExternals from "webpack-node-externals";
+import { EsbuildPlugin } from "esbuild-loader";
+import { TsconfigPathsPlugin } from "tsconfig-paths-webpack-plugin";
 
+const PublicDir = resolve(process.cwd(), "public");
 /**
  * @type {webpack.Configuration}
  * */
@@ -25,9 +29,15 @@ const config =
 
     plugins: [
       new HtmlWebpackPlugin({
-        template: "./public/index.html",
+        template: "./public/index-new-build.html",
         favicon: "./public/favicon.ico",
+        filename: "index.html",
+        publicPath: "",
+        templateParameters: {
+          PUBLIC_URL: PublicDir,
+        },
       }),
+      // new InterpolateHtmlPlugin({PUBLIC_URL: 'public' })
       // new CopyPlugin({
       //   patterns: [
       //     {
@@ -51,8 +61,14 @@ const config =
       //   analyzerMode: "static",
       //   openAnalyzer: false,
       // }),
-      new webpack.DefinePlugin({}),
+      new EsbuildPlugin({}),
       // new WebpackManifestPlugin({}),
+      // @ts-expect-error plugin-error
+      new TsconfigPathsPlugin({
+        baseUrl: ".",
+        configFile: "./jsconfig.json",
+        extensions: [".js", ".jsx", ".mjs"],
+      }),
     ],
     optimization: {
       usedExports: true,
@@ -63,7 +79,7 @@ const config =
         // ignore files in the 'ignore' directory
         [resolve("backend")]: false,
       },
-      extensions: [".js", ".css", ".cjs", ".mjs"],
+      extensions: [".js", ".css", ".jsx", ".mjs"],
     },
     module: {
       rules: [
@@ -71,8 +87,11 @@ const config =
           test: /\.html$/i,
           loader: "html-loader",
           options: {
-            preprocessor: (content) => {
-              return content.replace(/%PUBLIC_URL%/g, "");
+            preprocessor: (/** @type {string} */ content) => {
+              return content.replace(
+                /%PUBLIC_URL%/g,
+                resolve(process.cwd(), "public")
+              );
             },
             esModule: true,
           },
@@ -80,12 +99,22 @@ const config =
         {
           test: /\.m?js$/,
           exclude: /node_modules/,
-          use: "esbuild-loader",
+          loader: "esbuild-loader",
+          options: {
+            // JavaScript version to compile to
+            target: "es2020",
+            tsconfig: "./jsconfig.json",
+          },
         },
         {
           test: /\.jsx$/,
           exclude: /node_modules/,
-          use: "esbuild-loader",
+          loader: "esbuild-loader",
+          options: {
+            // JavaScript version to compile to
+            target: "es2020",
+            tsconfig: "./jsconfig.json",
+          },
         },
         {
           test: /\.css$/i,
@@ -94,9 +123,9 @@ const config =
         // other rules
       ],
     },
-    externals: {
-      react: "React",
-    },
+    // externals: nodeExternals({
+    //   allowlist: ["react", "react-dom"],
+    // }),
     /**
      * @type {import("webpack-dev-server").Configuration}
      * */
