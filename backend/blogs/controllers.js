@@ -51,7 +51,7 @@ blogsRouter.delete("/:url", userExtractor, async (request, response, next) => {
     const author = request.author;
     const deleteBlog = await Blog.findOne({ author });
     if (!deleteBlog.url || deleteBlog.url !== request.params.url) {
-      return response.status(401).json({ error: "token missing or invalid" });
+      return response.status(401).json({ error: "url is mismatch!" });
     }
     const result = await Blog.findOneAndDelete(
       {
@@ -69,8 +69,8 @@ blogsRouter.delete("/:url", userExtractor, async (request, response, next) => {
 });
 blogsRouter.put("/:url", userExtractor, async (request, response, next) => {
   const { title } = request.body;
+  const author = request.author;
   try {
-    const author = request.author;
     const putBlog = await Blog.findOne({ author });
     if (!putBlog.url || putBlog.url !== request.params.url) {
       return response.status(401).json({ error: "token missing or invalid" });

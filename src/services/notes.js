@@ -17,13 +17,12 @@ const setToken = (newToken) => {
 };
 const getAll = async () => {
   try {
-    const request = axios.get(baseUrl, {
+    const response = await axios.get(baseUrl, {
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Headers": "*",
       },
     });
-    const response = await request;
     return response.data;
   } catch (e) {
     console.error(`error :>> ${getAll.name},`, e);
@@ -38,8 +37,7 @@ const create = async (newNote) => {
     const config = {
       headers: { Authorization: token },
     };
-    const request = axios.post(baseUrl, newNote, config);
-    const response = await request;
+    const response = await axios.post(baseUrl, newNote, config);
     return response.data;
   } catch (e) {
     console.error(`error :>> ${create.name},`, e);
@@ -48,8 +46,8 @@ const create = async (newNote) => {
 
 const update = async (id, newNote) => {
   try {
-    const request = axios.put(`${baseUrl}/${id}`, newNote);
     const response = await request;
+    axios.put(`${baseUrl}/${id}`, newNote);
     return response.data;
   } catch (e) {
     console.error(`error :>> ${update.name},`, e);

@@ -1,73 +1,37 @@
-import { useState, useEffect, useRef } from "react";
+/**
+ * @typedef {{author: string, url: string, likes: number, title: string}} BlogType
+ * @typedef {{id?: string,content: string,important: boolean}} NoteType
+ * @typedef {{id: number, username: string, name: string, }} UserType
+ * */
+
+import { useState, useEffect, useRef, useLayoutEffect } from "react";
 import Note from "./components/Note";
 import Blog from "./components/Blog";
-import Notification from "./components/Notification";
+import Notification from "./components/middleware/Notification.jsx";
 import Footer from "./components/Footer";
+import LoginForm from "./components/Login";
+import Togglable from "./components/middleware/Togglable";
 
 import noteService from "./services/notes.js";
 import blogService from "./services/blogs.js";
 import loginService from "./services/login.js";
 import "./App.css";
 
-/**
- * @param {{ handleLogin: (
- *  e: React.FormEvent<HTMLFormElement>,
- *  userData: { username: string; password: string }
- * ) => void}} props
- */
-
 const App = (/** @type {React.HTMLAttributes<HTMLDivElement>} */ props) => {
   const [showAll, setShowAll] = useState(true);
-  const [newNote, setNewNote] = useState("");
   const [errorMessage, setErrorMessage] = useState(
     /** @type {string | null} */ ("")
   );
 
-  const [blogs, setBlogs] = useState(/** @type {unknown[]} TODO */ ([]));
-  const [notes, setNotes] = useState(/** @type {unknown[]} TODO */ ([]));
-  const [user, setUser] = useState(/** @type {{} | null} TODO */ (null));
-  const [newBlog, setNewBlog] = useState({
-    title: "",
-    url: "",
-  });
+  const [blogs, setBlogs] = useState(/** @type {BlogType[]} */ ([]));
+  const [notes, setNotes] = useState(/** @type {NoteType[]} TODO */ ([]));
+  const [user, setUser] = useState(/** @type {UserType | null} TODO */ (null));
 
-  const LoginForm = ({ handleLogin }) => {
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
-    return (
-      <form
-        onSubmit={(e) => {
-          handleLogin(e, { username, password });
-          setUsername("");
-          setPassword("");
-        }}
-      >
-        <div>
-          username
-          <input
-            type="text"
-            value={username}
-            name="Username"
-            autoComplete="Username"
-            onChange={({ target }) => {
-              setUsername(target.value);
-            }}
-          />
-        </div>
-        <div>
-          password
-          <input
-            type="password"
-            value={password}
-            name="Password"
-            autoComplete="off"
-            onChange={({ target }) => setPassword(target.value)}
-          />
-        </div>
-        <button type="submit">login</button>
-      </form>
-    );
-  };
+  const noteFormRef = useRef(
+    /** @type {{toggleVisibility: () => void} | undefined} | undefined} */ (
+      undefined
+    )
+  );
   /**
    * @param {React.FormEvent<HTMLFormElement>} event
    * @param {object} param
@@ -77,11 +41,14 @@ const App = (/** @type {React.HTMLAttributes<HTMLDivElement>} */ props) => {
   const handleLogin = async (event, { username, password }) => {
     event.preventDefault();
     try {
+      /**
+       * @type {{token: string} & UserType}
+       */
       const loginUser = await loginService.login({
         username,
         password,
       });
-      console.log("loginUser", loginUser);
+      /*#__PURE__*/ console.log("loginUser", loginUser);
       window.localStorage.setItem(
         "loggedNoteappUser",
         JSON.stringify(loginUser)
@@ -97,7 +64,7 @@ const App = (/** @type {React.HTMLAttributes<HTMLDivElement>} */ props) => {
     }
   };
   /**
-   * @param {React.ClickEvent<HTMLButtonElement>} event
+   * @param {React.MouseEvent<HTMLButtonElement>} event
    */
   const handleLogout = (event) => {
     event.preventDefault();
@@ -140,7 +107,7 @@ const App = (/** @type {React.HTMLAttributes<HTMLDivElement>} */ props) => {
 
     noteService
       .update(id, changedNote)
-      .then((returnNotes) => {
+      .then((/** @type {NoteType} */ returnNotes) => {
         setNotes(notes.map((note) => (note.id !== id ? note : returnNotes)));
       })
       .catch(() => {
@@ -153,51 +120,56 @@ const App = (/** @type {React.HTMLAttributes<HTMLDivElement>} */ props) => {
         setNotes(notes.filter((n) => n.id !== id));
       });
   };
-  useEffect(userHook, [window.localStorage]);
-  useEffect(notesHook, [noteService]);
-  useEffect(blogHook, [blogService]);
+  useLayoutEffect(userHook, []);
+  useEffect(notesHook, []);
+  useEffect(blogHook, []);
   // TODO2: addBlog
   /**
-   * @type {React.FormEventHandler<HTMLFormElement>}
+   * @param {NoteType} noteObject
    */
-  const addNote = (event) => {
-    event.preventDefault();
-    const noteObject = {
-      content: newNote,
-      date: new Date().toISOString(),
-      important: Math.random() < 0.5,
-      id: notes.length + 1,
-    };
-
+  const addNote = (noteObject) => {
+    noteFormRef.current?.toggleVisibility();
     noteService.create(noteObject).then((returnedNote) => {
       setNotes(notes.concat(returnedNote));
-      setNewNote("");
     });
   };
   /**
-   * @type {React.FormEventHandler<HTMLFormElement>} event
+   * @param {BlogType} blogObject
    */
-  const addBlog = (event) => {
-    event.preventDefault();
-    const blogObject = {
-      title: newBlog.title,
-      author: user.username,
-      url: newBlog.url,
-      users: user.id,
-    };
-    blogService.create(blogObject).then((returnedBlog) => {
-      setBlogs(blogs.concat(returnedBlog));
-      setNewBlog({
-        title: "",
-        url: "",
+  const addBlog = (blogObject) => {
+    blogService
+      .create(blogObject)
+      .then((/** @type {BlogType[]} */ returnedBlog) => {
+        setBlogs(blogs.concat(returnedBlog));
       });
+  };
+  /**
+   * @param {string} blogUrl
+   * @param {BlogType} blogObject
+   */
+  const removeBlog = (blogUrl, blogObject) => {
+    blogService.remove(blogUrl, blogObject).then(() => {
+      setBlogs(blogs.filter((blog) => blog.url !== blogUrl));
     });
+  };
+  /**
+   * @param {string} blogUrl
+   * @param {BlogType} blogObject
+   */
+  const updateBlog = (blogUrl, blogObject) => {
+    blogService
+      .update(blogUrl, blogObject)
+      .then((/** @type {BlogType} */ returnedBlog) => {
+        setBlogs(
+          blogs.map((blog) => (blog.url !== blogUrl ? blog : returnedBlog))
+        );
+      });
   };
   // TODO3: split notes & blogs -> half, split pure-component
   return (
     <div style={props.style}>
       <h1>Notes & Blogs</h1>
-      <Notification message={errorMessage} isError={true} />
+      <Notification message={errorMessage} isError />
       <h2>
         {user === null ? (
           "no user"
@@ -212,7 +184,9 @@ const App = (/** @type {React.HTMLAttributes<HTMLDivElement>} */ props) => {
       </h2>
 
       {user === null ? (
-        <LoginForm handleLogin={handleLogin} />
+        <Togglable buttonLabel="login">
+          <LoginForm handleLogin={handleLogin} />
+        </Togglable>
       ) : (
         <Note.NoteComponent
           notes={notes}
@@ -220,23 +194,22 @@ const App = (/** @type {React.HTMLAttributes<HTMLDivElement>} */ props) => {
           showAll={showAll}
           setShowAll={setShowAll}
         >
-          <Note.NoteForm
-            addNote={addNote}
-            newNote={newNote}
-            setNewNote={setNewNote}
-          />
+          <Togglable buttonLabel="new note" ref={noteFormRef}>
+            <Note.NoteForm createNode={addNote} />
+          </Togglable>
         </Note.NoteComponent>
       )}
 
       <hr />
-      <Blog.BlogComponent blogs={blogs}>
+      <Blog.BlogComponent
+        blogs={blogs}
+        deleteBlog={removeBlog}
+        likeBlog={updateBlog}
+      >
         {user && (
-          <Blog.BlogForm
-            addBlog={addBlog}
-            newBlog={newBlog}
-            setNewBlog={setNewBlog}
-            username={user.username}
-          />
+          <Togglable buttonLabel="new blog">
+            <Blog.BlogForm createBlog={addBlog} user={user} />
+          </Togglable>
         )}
       </Blog.BlogComponent>
       <Footer />

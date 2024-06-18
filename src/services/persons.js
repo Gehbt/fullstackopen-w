@@ -3,8 +3,7 @@ const baseUrl = "/api/persons";
 
 const getAll = async () => {
   try {
-    const request = axios.get(baseUrl);
-    const response = await request;
+    const response = await axios.get(baseUrl);
     return response.data;
   } catch (e) {
     console.error(`error :>> ${getAll.name},`, e);
@@ -15,8 +14,7 @@ const getAll = async () => {
  */
 const create = async (newPerson) => {
   try {
-    const request = axios.post(baseUrl, newPerson);
-    const response = await request;
+    const response = await axios.post(baseUrl, newPerson);
     return response.data;
   } catch (e) {
     console.error(`error :>> ${create.name},`, e);
@@ -32,8 +30,7 @@ const create = async (newPerson) => {
  */
 const remove = async (id, newPerson) => {
   try {
-    const request = axios.delete(`${baseUrl}/${id}`, newPerson);
-    const response = await request;
+    const response = await axios.delete(`${baseUrl}/${id}`, newPerson);
     return response.data;
   } catch (e) {
     console.error(`error :>> ${remove.name},`, e);
@@ -49,8 +46,7 @@ const remove = async (id, newPerson) => {
  */
 const update = async (id, newPerson) => {
   try {
-    const request = axios.put(`${baseUrl}/${id}`, newPerson);
-    const response = await request;
+    const response = await axios.put(`${baseUrl}/${id}`, newPerson);
     return response.data;
   } catch (e) {
     console.error(`error :>> ${update.name},`, e);

@@ -1,6 +1,7 @@
 /**
- * @param {string} message
- * @param {boolean} isError
+ * @param {object} props - description
+ * @param {string | null} props.message
+ * @param {boolean} props.isError
  * @return {JSX.Element|null}
  */
 const Notification = ({ message, isError }) => {

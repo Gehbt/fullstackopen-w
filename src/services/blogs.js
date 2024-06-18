@@ -21,40 +21,37 @@ const getAll = async () => {
   if (!token) {
     return [];
   }
-  const request = axios.get(baseUrl, {
+  const response = await axios.get(baseUrl, {
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Headers": "*",
       Authorization: token,
     },
   });
-  const response = await request;
   return response.data;
 };
 const create = async (newBlog) => {
   const tokenConfig = {
     headers: { Authorization: token },
   };
-  const request = axios.post(baseUrl, newBlog, tokenConfig);
-  const response = await request;
+  const response = await axios.post(baseUrl, newBlog, tokenConfig);
   return response.data;
 };
 
-const update = async (id, newObject) => {
+const update = async (id, newBlog) => {
   const tokenConfig = {
     headers: { Authorization: token },
   };
-  const request = axios.put(`${baseUrl}/${id}`, newObject, tokenConfig);
-  const response = await request;
+  console.log("token");
+  const response = await axios.put(`${baseUrl}/${id}`, newBlog, tokenConfig);
   return response.data;
 };
 
-const remove = async (id, newObject) => {
+const remove = async (id, oldBlog) => {
   const tokenConfig = {
     headers: { Authorization: token },
   };
-  const request = axios.delete(`${baseUrl}/${id}`, newObject, tokenConfig);
-  const response = await request;
+  const response = await axios.delete(`${baseUrl}/${id}`, oldBlog, tokenConfig);
   return response.data;
 };
 

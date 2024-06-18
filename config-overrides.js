@@ -65,13 +65,16 @@ export const webpack = override(
   //     tsconfig: "./jsconfig.json",
   //   },
   // }),
-  addWebpackPlugin(
-    new TsconfigPathsPlugin({
-      baseUrl: ".",
-      configFile: "./jsconfig.json",
-      extensions: [".js", ".jsx", ".mjs"],
-    })
-  ),
+
+  // ! useless: no tsconfig
+  // addWebpackPlugin(
+  //   new TsconfigPathsPlugin({
+  //     baseUrl: ".",
+  //     configFile: "./jsconfig.json",
+  //     extensions: [".js", ".jsx", ".mjs"],
+  //   })
+  // ),
+
   // addWebpackPlugin(
   //   new StylexPlugin({
   //     filename: "styles.[contenthash].css",

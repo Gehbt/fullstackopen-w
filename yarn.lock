@@ -2608,6 +2608,11 @@
     string-ts "2.1.1"
     valibot "0.30.0"
 
+"@eslint/compat@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.npmmirror.com/@eslint/compat/-/compat-1.1.0.tgz#fdc7d19a66820770bf58ced0342153769d8686f0"
+  integrity sha512-s9Wi/p25+KbzxKlDm3VshQdImhWk+cbdblhwGNnyCU5lpSwtWa4v7VQCxSki0FAUrGA3s8nCWgYzAH41mwQVKQ==
+
 "@eslint/config-array@^0.15.1":
   version "0.15.1"
   resolved "https://registry.npmmirror.com/@eslint/config-array/-/config-array-0.15.1.tgz#1fa78b422d98f4e7979f2211a1fde137e26c7d61"

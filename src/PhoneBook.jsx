@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import personService from "./services/persons";
-import Notification from "./components/Notification";
+import Notification from "./components/middleware/Notification";
 import { setWithReset } from "./tools/index";
 const PhoneBookApp = (props) => {
   const [persons, setPersons] = useState([]);
@@ -80,7 +80,6 @@ const PhoneBookApp = (props) => {
     setNewNumber(event.target.value);
   }
   function handleDelete(name) {
-    // eslint-disable-next-line no-restricted-globals
     if (confirm("Are you sure you want to delete")) {
       const targetPerson = persons.find((person) => person.name === name);
       if (targetPerson) {

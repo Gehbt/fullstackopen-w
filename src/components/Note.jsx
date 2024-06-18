@@ -1,11 +1,12 @@
+import { useState } from "react";
 /**
  * @typedef {(...args: any[]) => any} AnyFunction
  * @typedef {(...args: any[]) => void} VoidFunction
  */
 /**
  * @param {object} props
- * @param {{id: string, content: string, important: boolean}} props.note
- * @param {() => void)} props.toggleImportance
+ * @param {{id?: string, content: string, important: boolean}} props.note
+ * @param {() => void} props.toggleImportance
  */
 const NoteList = ({ note, toggleImportance }) => {
   const label = note.important ? "make not important" : "make important";
@@ -15,9 +16,12 @@ const NoteList = ({ note, toggleImportance }) => {
       className="note"
       style={{
         // textAlign: "left",
+        width: "80%",
         display: "flex",
         justifyContent: "space-between",
+        textOverflow: "ellipsis",
         content: ">",
+        whiteSpace: "pre-wrap",
       }}
     >
       {note.content}
@@ -25,18 +29,28 @@ const NoteList = ({ note, toggleImportance }) => {
     </li>
   );
 };
-/**
- * @param {object} props - The properties passed to the component.
- * @param {React.FormEventHandler<HTMLFormElement>} props.addNote - The function to add a new note.
- * @param {string} props.newNote - The current value of the new note.
- * @param {React.Dispatch<React.SetStateAction<string>>} props.setNewNote - The function to set the new note value.
- */
-const NoteForm = ({ addNote, newNote, setNewNote }) => {
+
+const NoteForm = (
+  /** @type {{createNote: (props: object)=>void}} */ { createNote }
+) => {
+  const [newNote, setNewNote] = useState("");
   /**
    * @param {React.ChangeEvent<HTMLInputElement>} event
    */
   const handleNoteChange = (event) => {
     setNewNote(event.target.value);
+  };
+  /**
+   * @type {React.FormEventHandler<HTMLFormElement>}
+   */
+  const addNote = (event) => {
+    event.preventDefault();
+    createNote({
+      content: newNote,
+      important: Math.random() > 0.5,
+    });
+
+    setNewNote("");
   };
   return (
     <form onSubmit={addNote}>
@@ -52,13 +66,12 @@ const NoteForm = ({ addNote, newNote, setNewNote }) => {
 };
 
 /**
- *
- * @param {{
- *    notes: {id: string,content: string,important: boolean}[],
- *    toggleImportanceOf: (id: any) => void,
- *    showAll: boolean,
- *    setShowAll: () => boolean,
- *    children: React.ReactNode, }} props
+ * @param {object} props
+ * @param {{id?: string,content: string,important: boolean}[]} props.notes
+ * @param {(id: any) => void} props.toggleImportanceOf
+ * @param {boolean} props.showAll
+ * @param {(b:boolean) => void} props.setShowAll
+ * @param {React.ReactNode} props.children
  */
 const NoteComponent = ({
   notes,

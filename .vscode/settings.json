@@ -8,6 +8,7 @@
     "Stylex",
     "stylexjs",
     "swcrc",
+    "Togglable",
     "TTFB"
   ],
   "cSpell.ignorePaths": [
@@ -27,6 +28,9 @@
   "typescript.tsdk": "node_modules\\typescript\\lib",
   "jest.runMode": "on-demand",
   "explorer.fileNesting.enabled": true,
+  "files.associations": {
+    "jsconfig*.json": "jsonc"
+  },
   "explorer.fileNesting.patterns": {
     "*.ts": "${capture}.js",
     "*.js": "${capture}.js.map, ${capture}.min.js, ${capture}.d.ts",
@@ -36,9 +40,9 @@
     "package.json": "package-lock.json, yarn.lock, pnpm-lock.yaml, bun.lockb",
     "jsconfig.json": "jsconfig*.json"
   },
-  "eslint.experimental.useFlatConfig": true,
   "eslint.run": "onSave",
   "eslint.workingDirectories": [
-    "."
-  ]
+    "./src"
+  ],
+  "eslint.format.enable": true
 }
