@@ -12,5 +12,5 @@ export const favoriteBlog = (blogs) => {
   return blogs.find((blog) => blog.likes === maxLike);
 };
 
-// mostBlogs 统计全部blog数
-// mostLikes 统计全部like
+// mostBlogs 统计全部 blog 数
+// mostLikes 统计全部 like

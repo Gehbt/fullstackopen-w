@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     "composite": true,
-    "module": "Node16",
-    "moduleResolution": "node16",
+    "module": "Preserve",
+    "moduleResolution": "Bundler",
     "allowJs": true,
     "alwaysStrict": true,
     "baseUrl": "./backend",

@@ -1,19 +1,19 @@
 {
   "compilerOptions": {
     "composite": true,
-    "module": "Node16",
+    "module": "Preserve",
     "allowJs": true,
-    "moduleResolution": "Node16",
+    "moduleResolution": "Bundler",
     "target": "ES2020",
     "esModuleInterop": true,
     "outDir": "./dist",
     "resolveJsonModule": true
   },
   "include": [
-    "babel.config.cjs",
+    "./babel.config.cjs",
     "./config-overrides.js",
-    "./coc_boot.mjs",
-    "webpack.config.mjs",
+    "./coc_boot.js",
+    "./webpack.config.mjs",
     "./eslint.config.cjs",
   ]
 }

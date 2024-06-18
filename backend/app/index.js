@@ -1,4 +1,5 @@
 import express from "express";
+import pino from "pino";
 import pino_http from "pino-http";
 import cors from "cors";
 import personRouter from "~/persons/controllers.js";
@@ -11,6 +12,10 @@ import path from "node:path";
 import blogsRouter from "~/blogs/controllers.js";
 import usersRouter from "~/users/controllers.js";
 import loginRouter from "~/users/login.controllers.js";
+import {
+  custom_pino_pretty_Option,
+  pino_serializers,
+} from "~/utils/logger-pino";
 // import "express-async-errors"; // 去除 catch (exception) {next(exception)}(仅能)
 // import { createProxyMiddleware } from "http-proxy-middleware";
 const app = express();
@@ -25,7 +30,10 @@ app.use(
   pino_http({
     transport: {
       target: "pino-pretty",
+      /** @type {import("pino-pretty").PrettyOptions} */
+      options: custom_pino_pretty_Option,
     },
+    serializers: pino_serializers,
   })
 );
 // app.use(
