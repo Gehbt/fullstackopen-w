@@ -1,16 +1,26 @@
-import axios from "axios";
+import axios from "./bedrock.js";
 const baseUrl = "/api/persons";
 
 const getAll = async () => {
-  const request = axios.get(baseUrl);
-  const response = await request;
-  return response.data;
+  try {
+    const request = axios.get(baseUrl);
+    const response = await request;
+    return response.data;
+  } catch (e) {
+    console.error(`error :>> ${getAll.name},`, e);
+  }
 };
-
+/**
+ * @param {*} newPerson
+ */
 const create = async (newPerson) => {
-  const request = axios.post(baseUrl, newPerson);
-  const response = await request;
-  return response.data;
+  try {
+    const request = axios.post(baseUrl, newPerson);
+    const response = await request;
+    return response.data;
+  } catch (e) {
+    console.error(`error :>> ${create.name},`, e);
+  }
 };
 
 /**
@@ -21,9 +31,13 @@ const create = async (newPerson) => {
  * @return {any} The data of the response
  */
 const remove = async (id, newPerson) => {
-  const request = axios.delete(`${baseUrl}/${id}`, newPerson);
-  const response = await request;
-  return response.data;
+  try {
+    const request = axios.delete(`${baseUrl}/${id}`, newPerson);
+    const response = await request;
+    return response.data;
+  } catch (e) {
+    console.error(`error :>> ${remove.name},`, e);
+  }
 };
 
 /**
@@ -34,9 +48,13 @@ const remove = async (id, newPerson) => {
  * @return {any} The updated object data
  */
 const update = async (id, newPerson) => {
-  const request = axios.put(`${baseUrl}/${id}`, newPerson);
-  const response = await request;
-  return response.data;
+  try {
+    const request = axios.put(`${baseUrl}/${id}`, newPerson);
+    const response = await request;
+    return response.data;
+  } catch (e) {
+    console.error(`error :>> ${update.name},`, e);
+  }
 };
 const method = {
   getAll,

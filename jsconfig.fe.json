@@ -9,6 +9,7 @@
     "strict": true,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
+    "isolatedModules": true,
     "esModuleInterop": true,
     "baseUrl": "./src",
     "paths": {

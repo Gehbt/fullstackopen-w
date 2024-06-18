@@ -15,6 +15,7 @@
     "jsx": "react-jsx",
     "allowImportingTsExtensions": true,
     "strict": true,
+    "noEmit": true,
     "esModuleInterop": true,
     "isolatedModules": true,
     "baseUrl": ".",

@@ -15,43 +15,7 @@ import "./App.css";
  *  userData: { username: string; password: string }
  * ) => void}} props
  */
-const LoginForm = ({ handleLogin }) => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  return (
-    <form
-      onSubmit={(e) => {
-        handleLogin(e, { username, password });
-        setUsername("");
-        setPassword("");
-      }}
-    >
-      <div>
-        username
-        <input
-          type="text"
-          value={username}
-          name="Username"
-          autoComplete="Username"
-          onChange={({ target }) => {
-            setUsername(target.value);
-          }}
-        />
-      </div>
-      <div>
-        password
-        <input
-          type="password"
-          value={password}
-          name="Password"
-          autoComplete="off"
-          onChange={({ target }) => setPassword(target.value)}
-        />
-      </div>
-      <button type="submit">login</button>
-    </form>
-  );
-};
+
 const App = (/** @type {React.HTMLAttributes<HTMLDivElement>} */ props) => {
   const [showAll, setShowAll] = useState(true);
   const [newNote, setNewNote] = useState("");
@@ -66,6 +30,44 @@ const App = (/** @type {React.HTMLAttributes<HTMLDivElement>} */ props) => {
     title: "",
     url: "",
   });
+
+  const LoginForm = ({ handleLogin }) => {
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    return (
+      <form
+        onSubmit={(e) => {
+          handleLogin(e, { username, password });
+          setUsername("");
+          setPassword("");
+        }}
+      >
+        <div>
+          username
+          <input
+            type="text"
+            value={username}
+            name="Username"
+            autoComplete="Username"
+            onChange={({ target }) => {
+              setUsername(target.value);
+            }}
+          />
+        </div>
+        <div>
+          password
+          <input
+            type="password"
+            value={password}
+            name="Password"
+            autoComplete="off"
+            onChange={({ target }) => setPassword(target.value)}
+          />
+        </div>
+        <button type="submit">login</button>
+      </form>
+    );
+  };
   /**
    * @param {React.FormEvent<HTMLFormElement>} event
    * @param {object} param
@@ -79,15 +81,16 @@ const App = (/** @type {React.HTMLAttributes<HTMLDivElement>} */ props) => {
         username,
         password,
       });
-      /*#__PURE__*/ console.log("loginUser", loginUser);
+      console.log("loginUser", loginUser);
       window.localStorage.setItem(
         "loggedNoteappUser",
         JSON.stringify(loginUser)
       );
       noteService.setToken(loginUser.token);
       setUser(loginUser);
-    } catch {
+    } catch (e) {
       setErrorMessage("Wrong credentials");
+      console.log("error: ", e);
       window.setTimeout(() => {
         setErrorMessage(null);
       }, 5000);
@@ -104,11 +107,17 @@ const App = (/** @type {React.HTMLAttributes<HTMLDivElement>} */ props) => {
 
   const userHook = () => {
     const loggedUserJSON = window.localStorage.getItem("loggedNoteappUser");
-    if (loggedUserJSON) {
+    if (
+      loggedUserJSON &&
+      loggedUserJSON !== "null" &&
+      loggedUserJSON !== "undefined"
+    ) {
       const user = JSON.parse(loggedUserJSON);
       setUser(user);
       noteService.setToken(user?.token);
       blogService.setToken(user?.token);
+    } else {
+      console.log("no user");
     }
   };
   const notesHook = () => {
@@ -145,11 +154,11 @@ const App = (/** @type {React.HTMLAttributes<HTMLDivElement>} */ props) => {
       });
   };
   useEffect(userHook, [window.localStorage]);
-  useEffect(notesHook, []);
-  useEffect(blogHook, []);
+  useEffect(notesHook, [noteService]);
+  useEffect(blogHook, [blogService]);
   // TODO2: addBlog
   /**
-   * @type {React.FormEventHandler<HTMLFormElement>} event
+   * @type {React.FormEventHandler<HTMLFormElement>}
    */
   const addNote = (event) => {
     event.preventDefault();
@@ -193,9 +202,12 @@ const App = (/** @type {React.HTMLAttributes<HTMLDivElement>} */ props) => {
         {user === null ? (
           "no user"
         ) : (
-          <span>
-            hello {user.username} <button onClick={handleLogout}>logout</button>
-          </span>
+          <>
+            <p>hello `{user.username}`</p>
+            <p>
+              <button onClick={handleLogout}>logout</button>
+            </p>
+          </>
         )}
       </h2>
 

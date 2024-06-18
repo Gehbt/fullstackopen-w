@@ -1,6 +1,5 @@
 // @ts-check
 // ! fail to replace cra
-/* eslint-disable no-unused-vars */
 import webpack from "webpack";
 import path, { resolve } from "node:path";
 import { BundleAnalyzerPlugin } from "webpack-bundle-analyzer";

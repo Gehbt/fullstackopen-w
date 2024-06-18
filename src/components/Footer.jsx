@@ -1,11 +1,11 @@
 import stylex from "@stylexjs/stylex";
-const footerStyle = stylex.create({
+const footerStyle = {
   footer: {
     color: "green",
     fontStyle: "italic",
     fontSize: 16,
   },
-});
+};
 const Footer = () => {
   return (
     <div {...stylex.props(footerStyle.footer)}>

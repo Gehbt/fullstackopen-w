@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "./bedrock.js";
 const baseUrl = "/api/blogs";
 
 axios.defaults.headers.get["Accept"] = "*/*";
@@ -6,16 +6,20 @@ axios.defaults.headers.get["Accept"] = "*/*";
  * @type {string | null}
  */
 let token = null;
-
+/**
+ * @param {string | null} newToken
+ */
 const setToken = (newToken) => {
-  if (newToken) {
+  if (newToken && newToken !== "null" && newToken !== "undefined") {
     token = `bearer ${newToken}`;
+  } else {
+    token = null;
   }
 };
 
 const getAll = async () => {
   if (!token) {
-    return Promise.resolve([]);
+    return [];
   }
   const request = axios.get(baseUrl, {
     headers: {

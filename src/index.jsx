@@ -7,7 +7,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import stylex from "@stylexjs/stylex";
 
-const appStyle = stylex.create({
+const appStyle = {
   app: {
     padding: "5rem",
     display: "flex",
@@ -16,7 +16,7 @@ const appStyle = stylex.create({
     flexDirection: "column",
     textAlign: "center",
   },
-});
+};
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <App {...stylex.props(appStyle.app)} />

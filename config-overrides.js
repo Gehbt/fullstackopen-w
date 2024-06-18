@@ -17,7 +17,7 @@ import babel_type from "@babel/core"; // for type
 import babel_preset from "./babel.config.cjs";
 import StylexPlugin from "@stylexjs/webpack-plugin";
 import { fileURLToPath } from "url";
-
+import chalk from "chalk";
 const pwd = import.meta.dirname ?? dirname(fileURLToPath(import.meta.url));
 // * config more
 // https://idayer.com/create-react-app-rewired-guide/
@@ -109,4 +109,7 @@ export function babel(/** @type {babel_type.TransformOptions} */ config) {
 //   // kill(pid, "SIGINT");
 //   process.exit(0);
 // });
-console.log("override config!");
+console.log(
+  "override config!",
+  chalk.cyanBright(`http://localhost:${process.env.PORT}`)
+);
