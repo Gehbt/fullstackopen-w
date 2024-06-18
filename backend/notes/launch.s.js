@@ -19,7 +19,7 @@ Promise.all(promise_notes)
     Note.find({})
       .then((notes) => {
         notes.forEach((note) => {
-          console.log(note);
+          console.log("Note.find",note);
         });
       })
       .finally(() => {
@@ -51,7 +51,7 @@ Promise.all(promise_notes)
 //     mongoose.connection.close();
 //   });
 
-// 删除1
+// 删除 1
 // Note.deleteOne({ id: 1 })
 //   .then((result) => {
 //     console.log(result);
@@ -63,20 +63,20 @@ Promise.all(promise_notes)
 //     mongoose.connection.close();
 //   });
 
-// 数据Schema 字段选项
-//    type： 数据类型
+// 数据 Schema 字段选项
+//    type：数据类型
 //    min: 数值型设置最小值
 //    max: 数值型设置最大值
 //    minlength: 最小长度
 //    maxlength 最大长度
-//    required: 是否为必须字段，默认为false
+//    required: 是否为必须字段，默认为 false
 //    enum: 设置字段为枚举型，字段值必须是枚举列表中的值
 //    default: 设置字段的默认值
 //    unique: 设置字段索引唯一
 //    index: 设置字段索引
-//    match：设置是否通过正则验证，RegExp设置通过正则验证
+//    match：设置是否通过正则验证，RegExp 设置通过正则验证
 //    trim: 设置是否去除数据前后空格
 //    capped: 设置字段大小
-//    validate： 为字段添加一个验证器
-//    set: 添加set方法用于拦截设置值，按get方法进行设置
-//    get: 添加get方法用于获取值处理
+//    validate：为字段添加一个验证器
+//    set: 添加 set 方法用于拦截设置值，按 get 方法进行设置
+//    get: 添加 get 方法用于获取值处理

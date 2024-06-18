@@ -1,33 +1,33 @@
 ### GET All
-GET http://localhost:3001/api/notes
+GET http://localhost:3721/api/notes
 
 ### GET One
-GET http://localhost:3001/api/notes/sesdfdf
+GET http://localhost:3721/api/notes/sesdfdf
 
 
 ### POST
-POST http://localhost:3001/api/notes
+POST http://localhost:3721/api/notes
 Content-Type: application/json; charset=utf-8
 
 {"content": "poist"}
 
 
 ### GET user
-GET http://localhost:3001/api/users
+GET http://localhost:3721/api/users
 
 ### POST user
-POST http://localhost:3001/api/users
+POST http://localhost:3721/api/users
 Content-Type: application/json; charset=utf-8
 
 {
-  "id": 112,
-  "username": "root2",
-  "name": "Superuser2",
+  "id": 113,
+  "username": "root3",
+  "name": "Superuser",
   "password": "mluukkai"
 }
 
 ### POST notes
-POST http://localhost:3001/api/notes/
+POST http://localhost:3721/api/notes/
 Content-Type: application/json; charset=utf-8
 
 {
@@ -38,7 +38,7 @@ Content-Type: application/json; charset=utf-8
 }
 
 ### POST login
-POST http://localhost:3001/api/login/
+POST http://localhost:3721/api/login
 Content-Type: application/json; charset=utf-8
 
 {
@@ -47,7 +47,7 @@ Content-Type: application/json; charset=utf-8
 }
 
 ### POST with jwt
-POST http://localhost:3001/api/notes/
+POST http://localhost:3721/api/notes/
 Content-Type: application/json; charset=utf-8
 Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QyIiwiaWQiOjExMiwiaWF0IjoxNzA3NzUwMTE1fQ.NanIopMniisukdvY82M1Ii3zn6Fx5Oc3FjpMdkIYIh4
 
@@ -57,7 +57,7 @@ Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb
 }
 
 ### POST blog with jwt
-POST http://localhost:3001/api/blogs/
+POST http://localhost:3721/api/blogs/
 Content-Type: application/json; charset=utf-8
 Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QyIiwiaWQiOjExMiwiaWF0IjoxNzA3NzUwMTE1fQ.NanIopMniisukdvY82M1Ii3zn6Fx5Oc3FjpMdkIYIh4
 
@@ -67,6 +67,6 @@ Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb
 }
 
 ### GET blog
-GET http://localhost:3001/api/blogs/
+GET http://localhost:3721/api/blogs/
 Content-Type: application/json; charset=utf-8
 Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QyIiwiaWQiOjExMiwiaWF0IjoxNzA3NzUwMTE1fQ.NanIopMniisukdvY82M1Ii3zn6Fx5Oc3FjpMdkIYIh4

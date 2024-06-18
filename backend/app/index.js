@@ -12,6 +12,7 @@ import blogsRouter from "~/blogs/controllers.js";
 import usersRouter from "~/users/controllers.js";
 import loginRouter from "~/users/login.controllers.js";
 // import "express-async-errors"; // 去除 catch (exception) {next(exception)}(仅能)
+// import { createProxyMiddleware } from "http-proxy-middleware";
 const app = express();
 // 接收数据
 mkConnect();
@@ -27,6 +28,13 @@ app.use(
     },
   })
 );
+// app.use(
+//   "/api",
+//   createProxyMiddleware({
+//     target: "http://localhost:3720",
+//     changeOrigin: true,
+//   })
+// );
 
 app.get("/", (request, response) => {
   response.send("<h1>Hello World!</h1>");
@@ -34,8 +42,8 @@ app.get("/", (request, response) => {
 
 app.use(favicon(path.join(process.cwd(), "assets", "favicon.ico")));
 app.get("/api", (request, response) => {
-  response.send(/* html */`
-    <div style="display:flex;flex-direction: column; place-items: center; gap:12px;">
+  response.send(/* html */ `
+    <div style="display:flex; flex-direction:column; place-items:center; gap:12px;">
       <h2>now we have</h2>
       <div>
         <a href="/api/persons">/api/persons<a>

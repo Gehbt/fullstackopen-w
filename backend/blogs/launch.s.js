@@ -18,7 +18,7 @@ const blog1 = new Blog({
 //   });
 Blog.findOne({ url: "/js" })
   .then((result) => {
-    console.log(result);
+    console.log("Blog.findOne", result);
   })
   .finally(() => {
     mongoose.connection.close();

@@ -13,8 +13,8 @@ mongoose
   .catch((error) => {
     console.log("error connecting to MongoDB:", error.message);
   });
-// 在建立与数据库的连接后，我们为一个笔记定义模式(schema)和匹配的模型(model)
-// schema告诉Mongoose如何将笔记对象存储在数据库中。
+// 在建立与数据库的连接后，我们为一个笔记定义模式 (schema) 和匹配的模型 (model)
+// schema 告诉 Mongoose 如何将笔记对象存储在数据库中。
 const noteSchema = new mongoose.Schema({
   id: {
     type: Number,
@@ -25,5 +25,4 @@ const noteSchema = new mongoose.Schema({
   important: Boolean,
 });
 // 建立模型类
-// eslint-disable-next-line no-unused-vars
 const Note = mongoose.model("Note", noteSchema);

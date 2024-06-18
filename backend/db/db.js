@@ -25,4 +25,7 @@ async function run() {
     await client.close();
   }
 }
-run().catch(console.dir);
+run().catch((err) => {
+  console.log("err: >>> ");
+  console.dir(err);
+});

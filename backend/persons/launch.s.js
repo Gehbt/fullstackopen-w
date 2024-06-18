@@ -13,7 +13,7 @@ Promise.all(promise_persons)
     Person.find({})
       .then((persons) => {
         persons.forEach((person) => {
-          console.log(person);
+          console.log("Person.find", person);
         });
       })
       .finally(() => {
