@@ -1,24 +1,32 @@
+/* v8 ignore next 200 */
 import { useState, useEffect } from "react";
 import personService from "./services/persons";
 import Notification from "./components/middleware/Notification";
-import { setWithReset } from "./tools/index";
+
+/**
+ * @param {React.HTMLAttributes<HTMLDivElement>} props
+ */
 const PhoneBookApp = (props) => {
-  const [persons, setPersons] = useState([]);
+  const [persons, setPersons] = useState(/** @type {PersonType[]} */ ([]));
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [searchName, setSearchName] = useState("");
   const [message, setMessage] = useState("");
   const [errorState, setErrorState] = useState(false);
   const init = () => {
-    personService.getAll().then((init) => [setPersons(init)]);
+    personService.getAll().then((init) => setPersons(init));
   };
   useEffect(init, []);
+  /**
+   * @type {React.MouseEventHandler<HTMLButtonElement>} event
+   */
   const addPerson = (event) => {
     event.preventDefault();
     // change the name/number
     if (persons.find((person) => person.name === newName)) {
       // alert(`${newName} is already added to phone-book`);
       const t_person = persons.find((person) => person.name === newName);
+      if (!t_person) return;
       const changedPerson = {
         ...t_person,
         number: newNumber,
@@ -31,11 +39,11 @@ const PhoneBookApp = (props) => {
               person.id !== returnedPerson.id ? person : changedPerson
             )
           );
-          setWithReset(setMessage, "success");
+          setAndTimeOutReset(setMessage, "success");
         })
         .catch((error) => {
-          setWithReset(setMessage, error.response.data);
-          setWithReset(setErrorState, true);
+          setAndTimeOutReset(setMessage, error.response.data);
+          setAndTimeOutReset(setErrorState, true);
         })
         .finally(() => {
           setNewName("");
@@ -52,7 +60,7 @@ const PhoneBookApp = (props) => {
         .create(newPerson)
         .then((returnedPerson) => {
           setPersons(persons.concat(returnedPerson));
-          setWithReset(setMessage, "success");
+          setAndTimeOutReset(setMessage, "success");
         })
         .finally(() => {
           setNewName("");
@@ -67,18 +75,30 @@ const PhoneBookApp = (props) => {
     searchName === ""
       ? persons
       : persons.filter((persons) => persons.name.startsWith(searchName));
+  /**
+   * @type {React.ChangeEventHandler<HTMLInputElement>}
+   */
   function handleSearchChange(event) {
     console.log(event.target.value);
     setSearchName(event.target.value);
   }
+  /**
+   * @type {React.ChangeEventHandler<HTMLInputElement>}
+   */
   function handleNameChange(event) {
     console.log(event.target.value);
     setNewName(event.target.value);
   }
+  /**
+   * @type {React.ChangeEventHandler<HTMLInputElement>}
+   */
   function handleNumberChange(event) {
     console.log(event.target.value);
     setNewNumber(event.target.value);
   }
+  /**
+   * @param {string} name
+   */
   function handleDelete(name) {
     if (confirm("Are you sure you want to delete")) {
       const targetPerson = persons.find((person) => person.name === name);
@@ -86,7 +106,7 @@ const PhoneBookApp = (props) => {
         console.log("targetPerson :>> ", targetPerson);
         personService
           .remove(targetPerson.id)
-          .then((response) => {
+          .then(() => {
             console.log("name :>> ", name);
             setPersons(
               persons.filter((person) => person.id !== targetPerson.id)
@@ -94,11 +114,14 @@ const PhoneBookApp = (props) => {
           })
           .catch((err) => {
             // 本地有远端没有
-            setWithReset(setErrorState, true);
+            setAndTimeOutReset(setErrorState, true);
             if (err.response.status === 404) {
-              setWithReset(setMessage, name + "has removed!");
+              setAndTimeOutReset(setMessage, name + "has removed!");
             } else {
-              setWithReset(setMessage, "unknown error!" + err.response.status);
+              setAndTimeOutReset(
+                setMessage,
+                "unknown error!" + err.response.status
+              );
             }
           })
           .finally(() => {
@@ -144,5 +167,15 @@ const PhoneBookApp = (props) => {
     </div>
   );
 };
-
+/**
+ * @param {(...args: any[]) => any} setFn
+ * @param {any} value
+ * @param {number} timeOut
+ */
+function setAndTimeOutReset(setFn, value, timeOut = 5000) {
+  setFn(value);
+  window.setTimeout(() => {
+    setFn(null);
+  }, timeOut);
+}
 export default PhoneBookApp;

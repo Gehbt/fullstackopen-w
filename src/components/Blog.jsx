@@ -2,29 +2,33 @@ import { useState } from "react";
 /**
  * @typedef {(...args: any[]) => any} AnyFunction
  * @typedef {(...args: any[]) => void} VoidFunction
- * @typedef {{author: string, url: string, likes: number, title: string}} BlogType
  */
 
 /**
  * @param {object} props
  * @param {BlogType} props.blog
- * @param {(url: string, oldBlog: BlogType) => void} props.deleteBlog
- * @param {(url: string, newBlog: BlogType) => void} props.likeBlog
+ * @param {(url: "likes", newBlog: BlogType) => void} props.likeBlog
+ * @param {(url: string) => void} props.deleteBlog
  */
 const BlogList = ({ blog, deleteBlog, likeBlog }) => {
   return (
-    <li style={{ border: "1px solid black", listStyle: "none" }}>
+    <li
+      className="blog"
+      style={{ border: "1px solid black", listStyle: "none" }}
+    >
       <h3 style={{ marginBottom: "0" }}>{blog.title}</h3>
       <div>author: {blog.author || "unknown"}</div>
-      <div>url: {blog.url}</div>
+      <div>url: /{blog.url}</div>
       <button
-        onClick={() => likeBlog(blog.url, { ...blog, likes: blog.likes + 1 })}
+        className="like"
+        onClick={() => likeBlog("likes", { ...blog, likes: blog.likes + 1 })}
         style={{ marginBottom: "10px", marginRight: "10px" }}
       >
         like {blog.likes}
       </button>
       <button
-        onClick={() => deleteBlog(blog.url, blog)}
+        className="delete"
+        onClick={() => deleteBlog(blog.url)}
         style={{ marginBottom: "10px" }}
       >
         delete
@@ -34,12 +38,8 @@ const BlogList = ({ blog, deleteBlog, likeBlog }) => {
 };
 /**
  * @param {object} props - The properties passed to the component.
- * @param {React.FormEventHandler<HTMLFormElement>} props.createBlog - The function to handle the form submission.
- * @param {{
- *  username: string;
- *  name: string;
- *  id: number;
- * }} props.user - The username of the blog author.
+ * @param {(blogObject: BlogType) => void} props.createBlog - The function to handle the form submission.
+ * @param {UserType} props.user - The username of the blog author.
  */
 const BlogForm = ({ createBlog, user }) => {
   const [newBlog, setNewBlog] = useState({
@@ -51,11 +51,19 @@ const BlogForm = ({ createBlog, user }) => {
    */
   const addBlog = (e) => {
     e.preventDefault();
+    if (!newBlog.title || !newBlog.url) {
+      alert("title and url are required");
+      return;
+    }
+    /**
+     * @type {BlogType}
+     */
     const blogObject = {
       title: newBlog.title,
       author: user.username,
       url: newBlog.url,
       users: user.id,
+      likes: 0,
     };
     createBlog(blogObject);
     setNewBlog({ title: "", url: "" });
@@ -85,7 +93,7 @@ const BlogForm = ({ createBlog, user }) => {
         justifyContent: "center",
       }}
     >
-      <p style={{ margin: "0" }}>
+      <p className="title" style={{ margin: "0" }}>
         title:
         <input
           value={newBlog.title}
@@ -93,8 +101,10 @@ const BlogForm = ({ createBlog, user }) => {
           onInput={handleTitleChange}
         />
       </p>
-      <p style={{ margin: "0" }}>author: {user.username}</p>
-      <p style={{ margin: "0" }}>
+      <p className="author" style={{ margin: "0" }}>
+        author: {user.username}
+      </p>
+      <p className="url" style={{ margin: "0" }}>
         url:
         <input
           value={newBlog.url}
@@ -112,11 +122,11 @@ const BlogForm = ({ createBlog, user }) => {
  * Renders a component that displays a list of blogs.
  * @param {object} props
  * @param {BlogType[]} props.blogs
- * @param {React.ReactNode} props.children
- * @param {(url: string, oldBlog: BlogType) => void} props.deleteBlog
- * @param {(url: string, newBlog: BlogType) => void} props.likeBlog
+ * @param {React.ReactNode} [props.children]
+ * @param {(url: "likes", newBlog: BlogType) => void} props.likeBlog
+ * @param {(url: string) => void} props.deleteBlog
  */
-const BlogComponent = ({ blogs, children, deleteBlog, likeBlog }) => (
+const BlogComponent = ({ blogs, children = [], deleteBlog, likeBlog }) => (
   <>
     <h2>Blogs</h2>
     {children}
@@ -126,6 +136,7 @@ const BlogComponent = ({ blogs, children, deleteBlog, likeBlog }) => (
         display: "grid",
         gridTemplateColumns: "200px 200px 200px",
         gap: "2px",
+        padding: "0",
       }}
     >
       {blogs.length === 0

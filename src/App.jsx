@@ -1,13 +1,7 @@
-/**
- * @typedef {{author: string, url: string, likes: number, title: string}} BlogType
- * @typedef {{id?: string,content: string,important: boolean}} NoteType
- * @typedef {{id: number, username: string, name: string, }} UserType
- * */
-
 import { useState, useEffect, useRef, useLayoutEffect } from "react";
 import Note from "./components/Note";
 import Blog from "./components/Blog";
-import Notification from "./components/middleware/Notification.jsx";
+import Notification from "./components/middleware/Notification";
 import Footer from "./components/Footer";
 import LoginForm from "./components/Login";
 import Togglable from "./components/middleware/Togglable";
@@ -17,20 +11,22 @@ import blogService from "./services/blogs.js";
 import loginService from "./services/login.js";
 import "./App.css";
 
-const App = (/** @type {React.HTMLAttributes<HTMLDivElement>} */ props) => {
-  const [showAll, setShowAll] = useState(true);
+/**
+ *
+ * @param {React.HTMLAttributes<HTMLDivElement>} props
+ * @returns
+ */
+const App = (props) => {
   const [errorMessage, setErrorMessage] = useState(
     /** @type {string | null} */ ("")
   );
 
   const [blogs, setBlogs] = useState(/** @type {BlogType[]} */ ([]));
-  const [notes, setNotes] = useState(/** @type {NoteType[]} TODO */ ([]));
+  const [notes, setNotes] = useState(/** @type {NoteType[]} */ ([]));
   const [user, setUser] = useState(/** @type {UserType | null} TODO */ (null));
 
   const noteFormRef = useRef(
-    /** @type {{toggleVisibility: () => void} | undefined} | undefined} */ (
-      undefined
-    )
+    /** @type {{toggleVisibility: () => void} | undefined} */ (undefined)
   );
   /**
    * @param {React.FormEvent<HTMLFormElement>} event
@@ -54,6 +50,7 @@ const App = (/** @type {React.HTMLAttributes<HTMLDivElement>} */ props) => {
         JSON.stringify(loginUser)
       );
       noteService.setToken(loginUser.token);
+      blogService.setToken(loginUser.token);
       setUser(loginUser);
     } catch (e) {
       setErrorMessage("Wrong credentials");
@@ -64,25 +61,27 @@ const App = (/** @type {React.HTMLAttributes<HTMLDivElement>} */ props) => {
     }
   };
   /**
-   * @param {React.MouseEvent<HTMLButtonElement>} event
+   * if event is undefined which mean `jwt expired`
+   * @param {React.MouseEvent<HTMLButtonElement>} [event]
    */
   const handleLogout = (event) => {
-    event.preventDefault();
-    window.localStorage.setItem("loggedNoteappUser", null);
+    event?.preventDefault();
+    window.localStorage.setItem("loggedNoteappUser", "");
+    noteService.setToken(null);
+    blogService.setToken(null);
     setUser(null);
   };
 
   const userHook = () => {
     const loggedUserJSON = window.localStorage.getItem("loggedNoteappUser");
-    if (
-      loggedUserJSON &&
-      loggedUserJSON !== "null" &&
-      loggedUserJSON !== "undefined"
-    ) {
+    if (loggedUserJSON) {
+      /**
+       * @type {UserType}
+       */
       const user = JSON.parse(loggedUserJSON);
       setUser(user);
-      noteService.setToken(user?.token);
-      blogService.setToken(user?.token);
+      noteService.setToken(user.token);
+      blogService.setToken(user.token);
     } else {
       console.log("no user");
     }
@@ -95,24 +94,30 @@ const App = (/** @type {React.HTMLAttributes<HTMLDivElement>} */ props) => {
 
   const blogHook = () => {
     blogService.getAll().then((initialBlogs) => {
-      setBlogs(Array.from(initialBlogs));
+      setBlogs(initialBlogs);
     });
   };
   /**
-   * @param {string} id
+   * @param {number} id
    */
   const toggleImportanceOf = (id) => {
     const importNotes = notes.find((n) => n.id === id);
-    const changedNote = { ...importNotes, important: !importNotes.important };
+    if (!importNotes) return;
+    const changedNote = { ...importNotes, important: !importNotes?.important };
 
     noteService
       .update(id, changedNote)
-      .then((/** @type {NoteType} */ returnNotes) => {
+      .then((returnNotes) => {
         setNotes(notes.map((note) => (note.id !== id ? note : returnNotes)));
       })
-      .catch(() => {
+      .catch((e) => {
+        console.error("e", e);
+        if (e.response.status === 401) {
+          handleLogout();
+          return;
+        }
         setErrorMessage(
-          `Note '${importNotes.content}' was already removed from server`
+          `Note '${importNotes?.content}' was already removed from server`
         );
         window.setTimeout(() => {
           setErrorMessage(null);
@@ -121,49 +126,50 @@ const App = (/** @type {React.HTMLAttributes<HTMLDivElement>} */ props) => {
       });
   };
   useLayoutEffect(userHook, []);
-  useEffect(notesHook, []);
+  useEffect(notesHook, [user]);
   useEffect(blogHook, []);
   // TODO2: addBlog
   /**
-   * @param {NoteType} noteObject
+   * @param {InitNoteType} newNote
+   * @returns {void}
    */
-  const addNote = (noteObject) => {
+  const addNote = (newNote) => {
     noteFormRef.current?.toggleVisibility();
-    noteService.create(noteObject).then((returnedNote) => {
+    noteService.create(newNote).then((returnedNote) => {
       setNotes(notes.concat(returnedNote));
     });
   };
   /**
    * @param {BlogType} blogObject
+   * @returns {void}
    */
   const addBlog = (blogObject) => {
-    blogService
-      .create(blogObject)
-      .then((/** @type {BlogType[]} */ returnedBlog) => {
-        setBlogs(blogs.concat(returnedBlog));
-      });
-  };
-  /**
-   * @param {string} blogUrl
-   * @param {BlogType} blogObject
-   */
-  const removeBlog = (blogUrl, blogObject) => {
-    blogService.remove(blogUrl, blogObject).then(() => {
-      setBlogs(blogs.filter((blog) => blog.url !== blogUrl));
+    blogService.create(blogObject).then((returnedBlog) => {
+      setBlogs(blogs.concat(returnedBlog));
     });
   };
   /**
-   * @param {string} blogUrl
-   * @param {BlogType} blogObject
+   * @param {string} url
    */
-  const updateBlog = (blogUrl, blogObject) => {
-    blogService
-      .update(blogUrl, blogObject)
-      .then((/** @type {BlogType} */ returnedBlog) => {
-        setBlogs(
-          blogs.map((blog) => (blog.url !== blogUrl ? blog : returnedBlog))
-        );
-      });
+  const removeBlog = (url) => {
+    blogService.remove(url).then(() => {
+      setBlogs(blogs.filter((blog) => blog.url !== url));
+    });
+  };
+  /**
+   * @param {keyof BlogType} keys
+   * @param {BlogType} newBlog
+   */
+  const updateBlog = (keys, newBlog) => {
+    blogService.update(keys, newBlog).then((returnedBlog) => {
+      setBlogs(
+        blogs.map((blog) =>
+          blog.url !== returnedBlog.url || blog.author !== returnedBlog.author
+            ? blog
+            : returnedBlog
+        )
+      );
+    });
   };
   // TODO3: split notes & blogs -> half, split pure-component
   return (
@@ -182,7 +188,6 @@ const App = (/** @type {React.HTMLAttributes<HTMLDivElement>} */ props) => {
           </>
         )}
       </h2>
-
       {user === null ? (
         <Togglable buttonLabel="login">
           <LoginForm handleLogin={handleLogin} />
@@ -191,15 +196,12 @@ const App = (/** @type {React.HTMLAttributes<HTMLDivElement>} */ props) => {
         <Note.NoteComponent
           notes={notes}
           toggleImportanceOf={toggleImportanceOf}
-          showAll={showAll}
-          setShowAll={setShowAll}
         >
           <Togglable buttonLabel="new note" ref={noteFormRef}>
-            <Note.NoteForm createNode={addNote} />
+            <Note.NoteForm createNote={addNote} />
           </Togglable>
         </Note.NoteComponent>
       )}
-
       <hr />
       <Blog.BlogComponent
         blogs={blogs}

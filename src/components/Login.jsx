@@ -3,7 +3,7 @@ import { useState } from "react";
  * @param {{ handleLogin: (
  *  e: React.FormEvent<HTMLFormElement>,
  *  userData: { username: string; password: string }
- * ) => void}} props
+ * ) => void }} props
  */
 
 const LoginForm = ({ handleLogin }) => {

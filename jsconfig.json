@@ -15,6 +15,7 @@
     "jsx": "react-jsx",
     "allowImportingTsExtensions": true,
     "allowJs": true,
+    "checkJs": true,
     "strict": true,
     "noEmit": true,
     "esModuleInterop": true,
@@ -24,7 +25,10 @@
       "@/*": [
         "src/*"
       ]
-    }
+    },
+    "types": [
+      "vitest/globals"
+    ]
   },
   "include": [
     "src"

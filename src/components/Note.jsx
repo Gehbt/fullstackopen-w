@@ -1,12 +1,8 @@
 import { useState } from "react";
 /**
- * @typedef {(...args: any[]) => any} AnyFunction
- * @typedef {(...args: any[]) => void} VoidFunction
- */
-/**
  * @param {object} props
- * @param {{id?: string, content: string, important: boolean}} props.note
- * @param {() => void} props.toggleImportance
+ * @param {NoteType} props.note
+ * @param {(id: number) => void} props.toggleImportance
  */
 const NoteList = ({ note, toggleImportance }) => {
   const label = note.important ? "make not important" : "make important";
@@ -16,7 +12,7 @@ const NoteList = ({ note, toggleImportance }) => {
       className="note"
       style={{
         // textAlign: "left",
-        width: "80%",
+        width: "95%",
         display: "flex",
         justifyContent: "space-between",
         textOverflow: "ellipsis",
@@ -24,21 +20,26 @@ const NoteList = ({ note, toggleImportance }) => {
         whiteSpace: "pre-wrap",
       }}
     >
-      {note.content}
-      <button onClick={toggleImportance}>{label}</button>
+      <span>
+        {note.id} | <span>{note.content}</span>
+      </span>
+      <button onClick={() => toggleImportance(note.id)}>{label}</button>
     </li>
   );
 };
 
-const NoteForm = (
-  /** @type {{createNote: (props: object)=>void}} */ { createNote }
-) => {
-  const [newNote, setNewNote] = useState("");
+/**
+ * @param {object} props
+ * @param {(noteObject: InitNoteType)=> void} props.createNote
+ * @returns
+ */
+const NoteForm = ({ createNote }) => {
+  const [newNoteContent, setNewNoteContent] = useState("");
   /**
    * @param {React.ChangeEvent<HTMLInputElement>} event
    */
   const handleNoteChange = (event) => {
-    setNewNote(event.target.value);
+    setNewNoteContent(event.target.value);
   };
   /**
    * @type {React.FormEventHandler<HTMLFormElement>}
@@ -46,60 +47,59 @@ const NoteForm = (
   const addNote = (event) => {
     event.preventDefault();
     createNote({
-      content: newNote,
+      content: newNoteContent,
       important: Math.random() > 0.5,
     });
 
-    setNewNote("");
+    setNewNoteContent("");
   };
   return (
-    <form onSubmit={addNote}>
-      {/* TODO: important radio */}
-      <input
-        value={newNote}
-        placeholder="a new note..."
-        onChange={handleNoteChange}
-      />
-      <button type="submit">save</button>
-    </form>
+    <div className="formDiv">
+      <h2>Create a new note</h2>
+      <form onSubmit={addNote}>
+        {/* TODO: important radio */}
+        <input
+          id="note-input"
+          value={newNoteContent}
+          placeholder="a new note..."
+          onChange={handleNoteChange}
+        />
+        <button type="submit">save</button>
+      </form>
+    </div>
   );
 };
 
 /**
  * @param {object} props
- * @param {{id?: string,content: string,important: boolean}[]} props.notes
- * @param {(id: any) => void} props.toggleImportanceOf
- * @param {boolean} props.showAll
- * @param {(b:boolean) => void} props.setShowAll
- * @param {React.ReactNode} props.children
+ * @param {NoteType[]} props.notes
+ * @param {(id: number) => void} props.toggleImportanceOf
+ * @param {React.ReactNode} [props.children]
  */
-const NoteComponent = ({
-  notes,
-  toggleImportanceOf,
-  showAll,
-  setShowAll,
-  children,
-}) => {
+const NoteComponent = ({ notes, toggleImportanceOf, children }) => {
+  const [showAll, setShowAll] = useState(true);
   const notesToShow = showAll
     ? notes
     : notes.filter((note) => note.important === true);
+
   return (
     <>
       <h2>Notes</h2>
       <div style={{ marginBottom: "12px" }}>{children}</div>
       <div>
-        <button onClick={() => setShowAll(!showAll)}>
+        <button className="show" onClick={() => setShowAll(!showAll)}>
           show {showAll ? "important" : "all"}
         </button>
       </div>
       <ul>
-        {notesToShow.map((note) => (
-          <NoteList
-            key={note.id}
-            note={note}
-            toggleImportance={() => toggleImportanceOf(note.id)}
-          />
-        ))}
+        {notesToShow &&
+          notesToShow.map((note) => (
+            <NoteList
+              key={note.id}
+              note={note}
+              toggleImportance={toggleImportanceOf}
+            />
+          ))}
       </ul>
     </>
   );

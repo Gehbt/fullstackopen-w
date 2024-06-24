@@ -18,11 +18,14 @@ function Playground() {
     };
   }, [text]);
 
+  /**
+   * @type {React.ChangeEventHandler<HTMLInputElement>}
+   */
+  const handleChangeText = (e) => setText(e.target.value);
   return (
     <>
       <label>
-        日志内容：{" "}
-        <input value={text} onChange={(e) => setText(e.target.value)} />
+        日志内容： <input value={text} onChange={handleChangeText} />
       </label>
       <h1>{text}</h1>
     </>

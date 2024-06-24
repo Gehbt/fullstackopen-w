@@ -1,4 +1,7 @@
 import stylex from "@stylexjs/stylex";
+/**
+ * @type {Record<string,React.CSSProperties>}
+ */
 const footerStyle = {
   footer: {
     color: "green",
@@ -8,7 +11,7 @@ const footerStyle = {
 };
 const Footer = () => {
   return (
-    <div {...stylex.props(footerStyle.footer)}>
+    <div style={footerStyle.footer}>
       <br />
       <em>
         Note app, Department of Computer Science, University of Helsinki 2022
