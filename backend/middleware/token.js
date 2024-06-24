@@ -1,6 +1,7 @@
 import env from "~/utils/env.js";
 import { getTokenFrom } from "~/utils/getToken.js";
 import jwt from "jsonwebtoken";
+import logger from "~/utils/logger-pino";
 
 const { SECRET } = env;
 /** @type {import("express").RequestHandler} */
@@ -13,6 +14,7 @@ export const tokenExtractor = (request, response, next) => {
 export const userExtractor = (request, response, next) => {
   const decodedToken = jwt.verify(request.token, SECRET);
   if (!decodedToken.username) {
+    logger.error("token missing or invalid");
     return response.status(401).json({ error: "token missing or invalid" });
   }
   // Blog.author 对应 User.username

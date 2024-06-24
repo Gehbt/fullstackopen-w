@@ -64,7 +64,7 @@ app.get("/api", (request, response) => {
 app.use(middleware.tokenExtractor);
 app.use("/api/notes", notesRouter);
 app.use("/api/persons", personRouter);
-app.use("/api/blogs", middleware.userExtractor, blogsRouter);
+app.use("/api/blogs", blogsRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/login", loginRouter);
 app.use(middleware.errorHandler);

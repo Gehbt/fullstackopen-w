@@ -25,7 +25,7 @@ blogsRouter.get("/", async (request, response, next) => {
   }
 });
 
-blogsRouter.post("/", async (request, response) => {
+blogsRouter.post("/", userExtractor, async (request, response) => {
   const blog = new Blog(request.body);
 
   if (!blog.likes) {
@@ -48,15 +48,20 @@ blogsRouter.post("/", async (request, response) => {
 });
 blogsRouter.delete("/:url", userExtractor, async (request, response, next) => {
   try {
+    const url = request.params.url;
     const author = request.author;
-    const deleteBlog = await Blog.findOne({ author });
-    if (!deleteBlog.url || deleteBlog.url !== request.params.url) {
-      return response.status(401).json({ error: "url is mismatch!" });
+    // 找用户是否有这个博客
+    const authorBlogs = await Blog.find({ author });
+    const deleteBlog = authorBlogs.find((blog) => {
+      return blog.url === url;
+    });
+    if (!deleteBlog) {
+      return response
+        .status(401)
+        .json({ error: `author ${author} don't have blog/${url}` });
     }
     const result = await Blog.findOneAndDelete(
-      {
-        url: "/" + request.params.url,
-      },
+      { url, author },
       { context: "query" }
     );
     if (!result) {
@@ -67,19 +72,29 @@ blogsRouter.delete("/:url", userExtractor, async (request, response, next) => {
     next(e);
   }
 });
-blogsRouter.put("/:url", userExtractor, async (request, response, next) => {
-  const { title } = request.body;
+
+// 注：put 的 body 传入了 一个 blog 对象
+blogsRouter.put("/:key", userExtractor, async (request, response, next) => {
+  const { url } = request.body;
   const author = request.author;
+  const key = request.params.key;
   try {
-    const putBlog = await Blog.findOne({ author });
-    if (!putBlog.url || putBlog.url !== request.params.url) {
-      return response.status(401).json({ error: "token missing or invalid" });
+    const authorBlogs = await Blog.find({ author });
+    // 找到那篇原 blog
+    const putBlog = authorBlogs.find((blog) => {
+      return blog.url === url;
+    });
+    console.log("putBlog :>> ", putBlog);
+    if (!putBlog) {
+      return response
+        .status(401)
+        .json({ error: `author ${author} don't have blog/${url}` });
     }
 
     const updatedBlog = await Blog.findOneAndUpdate(
-      { url: "/" + request.params.url },
+      { url, author },
       {
-        title,
+        [key]: request.body[key],
       },
       { context: "query" }
     );

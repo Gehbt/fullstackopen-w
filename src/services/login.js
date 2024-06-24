@@ -1,6 +1,10 @@
 import axios from "./bedrock.js";
 const baseUrl = "/api/login";
 
+/**
+ * @param {{ username: string, password: string }} credentials
+ * @returns {Promise<UserType>}
+ */
 const login = async (credentials) => {
   try {
     console.log("credentials :>> ", credentials);
@@ -13,6 +17,7 @@ const login = async (credentials) => {
     return response.data;
   } catch (e) {
     console.error(`error :>> ${login.name},`, e);
+    throw new Error("Login error");
   }
 };
 

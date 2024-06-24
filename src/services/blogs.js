@@ -1,65 +1,87 @@
 import axios from "./bedrock.js";
+import { Token, setToken } from "./with-token.js";
 const baseUrl = "/api/blogs";
 
 axios.defaults.headers.get["Accept"] = "*/*";
+const tk = new Token();
 /**
- * @type {string | null}
+ * @returns {Promise<BlogType[]>}
  */
-let token = null;
-/**
- * @param {string | null} newToken
- */
-const setToken = (newToken) => {
-  if (newToken && newToken !== "null" && newToken !== "undefined") {
-    token = `bearer ${newToken}`;
-  } else {
-    token = null;
-  }
-};
-
 const getAll = async () => {
-  if (!token) {
-    return [];
-  }
+  // console.log("get blogs");
   const response = await axios.get(baseUrl, {
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Headers": "*",
-      Authorization: token,
+      Authorization: tk.token || undefined,
     },
   });
   return response.data;
 };
+/**
+ * @param {BlogType} newBlog
+ * @returns {Promise<BlogType>}
+ */
 const create = async (newBlog) => {
-  const tokenConfig = {
-    headers: { Authorization: token },
-  };
-  const response = await axios.post(baseUrl, newBlog, tokenConfig);
-  return response.data;
+  try {
+    if (!tk.token) {
+      throw new Error("token is not set");
+    }
+    const tokenConfig = {
+      headers: { Authorization: tk.token },
+    };
+    const response = await axios.post(baseUrl, newBlog, tokenConfig);
+    return response.data;
+  } catch (e) {
+    throw new Error("Blog.create Error");
+  }
 };
-
-const update = async (id, newBlog) => {
-  const tokenConfig = {
-    headers: { Authorization: token },
-  };
-  console.log("token");
-  const response = await axios.put(`${baseUrl}/${id}`, newBlog, tokenConfig);
-  return response.data;
+/**
+ * @param {keyof BlogType} key
+ * @param {BlogType} newBlog
+ * @returns {Promise<BlogType>}}
+ */
+const update = async (key, newBlog) => {
+  try {
+    if (!tk.token) {
+      throw new Error("token is not set");
+    }
+    const tokenConfig = {
+      headers: { Authorization: tk.token },
+    };
+    await axios.put(`${baseUrl}/${key}`, newBlog, tokenConfig);
+    console.log("Blog.update", newBlog);
+    return newBlog;
+  } catch (e) {
+    throw new Error("Blog.update Error");
+  }
 };
-
-const remove = async (id, oldBlog) => {
-  const tokenConfig = {
-    headers: { Authorization: token },
-  };
-  const response = await axios.delete(`${baseUrl}/${id}`, oldBlog, tokenConfig);
-  return response.data;
+/**
+ * @param {string} url
+ */
+const remove = async (url) => {
+  try {
+    if (!tk.token) {
+      throw new Error("token is not set");
+    }
+    const tokenConfig = {
+      headers: { Authorization: tk.token },
+    };
+    const response = await axios.delete(`${baseUrl}/${url}`, tokenConfig);
+    return response.data;
+  } catch (e) {
+    console.log("Blog.remove Error");
+  }
 };
 
 const method = {
   getAll,
   create,
   update,
-  setToken,
   remove,
+  /**
+   * @param {string | null} newToken
+   */
+  setToken: (newToken) => setToken(tk, newToken),
 };
 export default method;

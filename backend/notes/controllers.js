@@ -4,6 +4,8 @@ import express from "express";
 import User from "~/users/models.js";
 import jwt from "jsonwebtoken";
 import env from "~/utils/env.js";
+import { userExtractor } from "~/middleware/token.js";
+
 const { SECRET } = env;
 const notesRouter = express.Router();
 
@@ -33,7 +35,7 @@ notesRouter.get("/:id", (request, response, next) => {
 });
 // Delete
 // 对于在资源不存在的情况下应该向 DELETE 请求返回什么状态码，目前还没有达成共识。实际上，唯一的两个选择是 204 和 404。
-notesRouter.delete("/:id", (request, response, next) => {
+notesRouter.delete("/:id", userExtractor, (request, response, next) => {
   Note.findOneAndDelete({ id: Number(request.params.id) })
     .then((result) => {
       if (!result) {
@@ -82,15 +84,16 @@ notesRouter.post("/", async (request, response, next) => {
   }
 });
 // Put
-notesRouter.put("/:id", (request, response, next) => {
+notesRouter.put("/:id", userExtractor, (request, response, next) => {
   const { content, important } = request.body;
   // 当 findOneAndUpdate 被执行时，默认不运行验证
   Note.findOneAndUpdate(
-    { id: Number(request.params.id) },
+    { id: Number.parseInt(request.params.id) },
     { content, important },
     { new: true, runValidators: true, context: "query" }
   )
     .then((updatedNote) => {
+      logger.info("notes/controllers::notesRouter.put");
       response.json(updatedNote);
     })
     .catch((error) => {

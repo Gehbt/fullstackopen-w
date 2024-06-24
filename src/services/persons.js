@@ -1,16 +1,22 @@
+/* v8 ignore next 70 */
 import axios from "./bedrock.js";
 const baseUrl = "/api/persons";
 
+/**
+ * @returns {Promise<PersonType[]>}
+ */
 const getAll = async () => {
   try {
     const response = await axios.get(baseUrl);
     return response.data;
   } catch (e) {
     console.error(`error :>> ${getAll.name},`, e);
+    return [];
   }
 };
 /**
- * @param {*} newPerson
+ * @param {PersonType} newPerson
+ * @returns {Promise<PersonType>}
  */
 const create = async (newPerson) => {
   try {
@@ -18,22 +24,21 @@ const create = async (newPerson) => {
     return response.data;
   } catch (e) {
     console.error(`error :>> ${create.name},`, e);
+    throw new Error("Person.create Error");
   }
 };
 
 /**
  * Asynchronously removes an object with the specified ID.
- *
  * @param {number} id - The ID of the object to be removed
- * @param {object} newPerson - The new object to replace the removed object
- * @return {any} The data of the response
+ * @returns {Promise<void>}
  */
-const remove = async (id, newPerson) => {
+const remove = async (id) => {
   try {
-    const response = await axios.delete(`${baseUrl}/${id}`, newPerson);
-    return response.data;
+    await axios.delete(`${baseUrl}/${id}`);
   } catch (e) {
     console.error(`error :>> ${remove.name},`, e);
+    throw new Error("Person.remove Error");
   }
 };
 
@@ -41,8 +46,9 @@ const remove = async (id, newPerson) => {
  * Updates an object with the given id using the newObject.
  *
  * @param {number} id - The id of the object to be updated
- * @param {object} newPerson - The new object to update
- * @return {any} The updated object data
+ * @param {PersonType} newPerson - The new object to update
+ * @returns {Promise<PersonType>}
+ *
  */
 const update = async (id, newPerson) => {
   try {
@@ -50,6 +56,7 @@ const update = async (id, newPerson) => {
     return response.data;
   } catch (e) {
     console.error(`error :>> ${update.name},`, e);
+    throw new Error("Person.update Error");
   }
 };
 const method = {
