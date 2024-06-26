@@ -12,6 +12,7 @@ import path from "node:path";
 import blogsRouter from "~/blogs/controllers.js";
 import usersRouter from "~/users/controllers.js";
 import loginRouter from "~/users/login.controllers.js";
+import testingRouter from "~/testing/controllers";
 import {
   custom_pino_pretty_Option,
   pino_serializers,
@@ -67,6 +68,9 @@ app.use("/api/persons", personRouter);
 app.use("/api/blogs", blogsRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/login", loginRouter);
+if (process.env.NODE_ENV === "test") {
+  app.use("/api/testing", testingRouter);
+}
 app.use(middleware.errorHandler);
 app.use(middleware.unknownEndpoint);
 

@@ -21,9 +21,14 @@ const NoteList = ({ note, toggleImportance }) => {
       }}
     >
       <span>
-        {note.id} | <span>{note.content}</span>
+        {note.id} | <span className="note-content">{note.content}</span>
       </span>
-      <button onClick={() => toggleImportance(note.id)}>{label}</button>
+      <button
+        className="note-reset-state"
+        onClick={() => toggleImportance(note.id)}
+      >
+        {label}
+      </button>
     </li>
   );
 };
@@ -48,7 +53,7 @@ const NoteForm = ({ createNote }) => {
     event.preventDefault();
     createNote({
       content: newNoteContent,
-      important: Math.random() > 0.5,
+      important: false,
     });
 
     setNewNoteContent("");

@@ -1,10 +1,5 @@
 import { useState } from "react";
 /**
- * @typedef {(...args: any[]) => any} AnyFunction
- * @typedef {(...args: any[]) => void} VoidFunction
- */
-
-/**
  * @param {object} props
  * @param {BlogType} props.blog
  * @param {(url: "likes", newBlog: BlogType) => void} props.likeBlog
@@ -96,6 +91,7 @@ const BlogForm = ({ createBlog, user }) => {
       <p className="title" style={{ margin: "0" }}>
         title:
         <input
+          className="title"
           value={newBlog.title}
           placeholder="title"
           onInput={handleTitleChange}
@@ -107,13 +103,16 @@ const BlogForm = ({ createBlog, user }) => {
       <p className="url" style={{ margin: "0" }}>
         url:
         <input
+          className="url"
           value={newBlog.url}
           placeholder="url"
           onChange={handleUrlChange}
         />
       </p>
       <p style={{ display: "flex", justifyContent: "center", width: "100%" }}>
-        <button type="submit">create blog</button>
+        <button type="submit" className="add-blog">
+          create blog
+        </button>
       </p>
     </form>
   );
@@ -141,14 +140,16 @@ const BlogComponent = ({ blogs, children = [], deleteBlog, likeBlog }) => (
     >
       {blogs.length === 0
         ? "No blogs"
-        : blogs.map((blog, i) => (
-            <BlogList
-              key={blog.url}
-              blog={blog}
-              deleteBlog={deleteBlog}
-              likeBlog={likeBlog}
-            />
-          ))}
+        : blogs
+            .toSorted((a, b) => b.likes - a.likes)
+            .map((blog, i) => (
+              <BlogList
+                key={`${blog.url}-${i}`}
+                blog={blog}
+                deleteBlog={deleteBlog}
+                likeBlog={likeBlog}
+              />
+            ))}
     </ul>
   </>
 );

@@ -90,6 +90,7 @@ export default [
       "backend/*",
       "build/*",
       "new-build/*",
+      "./coverage",
     ],
     files: ["src/**/*.jsx", "src/**/*.js"],
   },

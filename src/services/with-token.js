@@ -24,10 +24,10 @@ export class Token {
  * @param {Token} tk
  * @param {string | null} newToken
  */
-export const setToken = (tk, newToken) => {
+export function setToken(tk, newToken) {
   if (newToken) {
     tk.token = newToken;
   } else {
     tk.token = null;
   }
-};
+}

@@ -13,7 +13,8 @@
     "test.note.api": "cross-env NODE_ENV=test jest --verbose tests/note_api.test.js",
     "test.blog.api": "cross-env NODE_ENV=test jest --verbose tests/blog_api.test.js",
     "test.note.api.spec": "cross-env NODE_ENV=test jest --verbose tests/note_api.test.js -t \"fails with statuscode 404 if note does not exist\"",
-    "test.user.api": "cross-env NODE_ENV=test jest --verbose tests/user_api.test.js"
+    "test.user.api": "cross-env NODE_ENV=test jest --verbose tests/user_api.test.js",
+    "start:test": "cross-env NODE_ENV=test node index.js"
   },
   "author": "",
   "license": "ISC",
