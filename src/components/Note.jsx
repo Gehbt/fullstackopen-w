@@ -19,6 +19,7 @@ const NoteList = ({ note, toggleImportance }) => {
         content: ">",
         whiteSpace: "pre-wrap",
       }}
+      key={note.id}
     >
       <span>
         {note.id} | <span className="note-content">{note.content}</span>

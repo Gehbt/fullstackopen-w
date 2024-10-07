@@ -25,4 +25,4 @@ concurrently(
 // .result.then(_, () => {
 //   console.error(chalk.red("coc fail"));
 // });
-console.log("concurrently run");
+console.log(chalk.blue("concurrently run"));

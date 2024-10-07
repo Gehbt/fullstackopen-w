@@ -10,6 +10,7 @@ const BlogList = ({ blog, deleteBlog, likeBlog }) => {
     <li
       className="blog"
       style={{ border: "1px solid black", listStyle: "none" }}
+      key={`${blog.author}-${blog.url}`}
     >
       <h3 style={{ marginBottom: "0" }}>{blog.title}</h3>
       <div>author: {blog.author || "unknown"}</div>

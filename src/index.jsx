@@ -6,6 +6,7 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import stylex from "@stylexjs/stylex";
+import { Counter } from "./trash/status";
 /**
  * @type {Record<string,React.CSSProperties>}
  */
@@ -26,6 +27,7 @@ if (!root) {
 createRoot(root).render(
   <StrictMode>
     <App style={appStyle.app} />
+    <Counter />
   </StrictMode>
 );
 

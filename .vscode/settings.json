@@ -10,7 +10,9 @@
     "stylexjs",
     "swcrc",
     "Togglable",
-    "TTFB"
+    "TTFB",
+    "Uncurried",
+    "zustand"
   ],
   "cSpell.ignorePaths": [
     "package-lock.json",

@@ -56,16 +56,16 @@ export const webpack = override(
       tsconfig: "./jsconfig.json",
     },
   }),
-  // addWebpackModuleRule({
-  //   test: /\.m?js$/,
-  //   exclude: /node_modules/,
-  //   loader: "esbuild-loader",
-  //   options: {
-  //     // JavaScript version to compile to
-  //     target: "es2020",
-  //     tsconfig: "./jsconfig.json",
-  //   },
-  // }),
+  addWebpackModuleRule({
+    test: /\.jsx$/,
+    exclude: /node_modules/,
+    loader: "esbuild-loader",
+    options: {
+      // JavaScript version to compile to
+      target: "es2020",
+      tsconfig: "./jsconfig.json",
+    },
+  }),
 
   // ! useless: no tsconfig
   // addWebpackPlugin(

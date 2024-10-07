@@ -5,17 +5,20 @@ import Blog from "../components/Blog";
 test("renders blog no author", () => {
   const deleteBlog = vi.fn();
   const likeBlog = vi.fn();
+  /**
+   * @type {BlogType[]}
+   */
   const blogsNoAuthor = [
     {
       likes: 0,
       title: "test title",
       url: "test url",
       users: 234,
+      author: "test author",
     },
   ];
   render(
     <Blog.BlogComponent
-      // @ts-expect-error 类型的问题直接忽略了
       blogs={blogsNoAuthor}
       deleteBlog={deleteBlog}
       likeBlog={likeBlog}
@@ -26,21 +29,22 @@ test("renders blog no author", () => {
 
 describe("renders content", () => {
   /**
+   * 注意：需要按照 likes 数从大到小排序
    * @type {BlogType[]}
    */
   const blogs = [
-    {
-      author: "test author",
-      likes: 0,
-      title: "test title",
-      url: "test url",
-      users: 234,
-    },
     {
       author: "test author2",
       likes: 1,
       title: "test title2",
       url: "test url2",
+      users: 234,
+    },
+    {
+      author: "test author",
+      likes: 0,
+      title: "test title",
+      url: "test url",
       users: 234,
     },
   ];
@@ -92,7 +96,7 @@ describe("renders content", () => {
   });
 
   test("like an blog", async () => {
-    const firstBlog = screen.getAllByRole("listitem")[0];
+    const firstBlog = screen.getAllByRole("listitem")[1];
     const button = /** @type {HTMLButtonElement} */ (
       firstBlog.querySelector("button.like")
     );

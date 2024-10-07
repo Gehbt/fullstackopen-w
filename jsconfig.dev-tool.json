@@ -15,5 +15,6 @@
     "./coc_boot.js",
     "./webpack.config.mjs",
     "eslint.config.js",
+    "./cra"
   ]
 }
