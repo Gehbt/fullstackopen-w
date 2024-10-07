@@ -11,7 +11,7 @@ app.use(express.json());
 
 app.use("/api/blogs", blogsRouter);
 
-const PORT = 3003;
+const PORT = 3723;
 app.listen(PORT, () => {
   console.log(`Server running on port http://localhost:${PORT}`);
 });

@@ -5,9 +5,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development nodemon",
-    "start": "node index.js",
-    "dev.be": "nodemon ./index.js",
+    "dev": "dotenvx run -q -f .env.local -- cross-env NODE_ENV=development nodemon",
+    "start": "dotenvx run -q -f .env.local -- node index.js",
+    "dev.be": "dotenvx run -q -f .env.local -- nodemon ./index.js",
     "echo": "tsx ./db/log.js",
     "test": "cross-env NODE_ENV=test jest --verbose",
     "test.note.api": "cross-env NODE_ENV=test jest --verbose tests/note_api.test.js",
@@ -19,6 +19,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@dotenvx/dotenvx": "^1.15.0",
     "@faker-js/faker": "^8.4.0",
     "@types/bcrypt": "^5.0.2",
     "@types/cors": "^2.8.17",
@@ -42,6 +43,7 @@
     "serve-favicon": "^2.5.0",
     "source-map-explorer": "^2.5.3",
     "supertest": "^6.3.4",
+    "ts-migrate-mongoose": "^3.8.4",
     "winston": "^3.11.0"
   },
   "devDependencies": {
