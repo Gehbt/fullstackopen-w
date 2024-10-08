@@ -52,8 +52,10 @@ const update = async (key, newBlog) => {
     await axios.put(`${baseUrl}/${key}`, newBlog, tokenConfig);
     console.log("Blog.update", newBlog);
     return newBlog;
-  } catch (e) {
-    throw new Error("Blog.update Error");
+  } catch (/** @type {*} */ e) {
+    console.error("Blog.update Error");
+
+    throw new Error(e);
   }
 };
 /**
@@ -69,8 +71,10 @@ const remove = async (url) => {
     };
     const response = await axios.delete(`${baseUrl}/${url}`, tokenConfig);
     return response.data;
-  } catch (e) {
-    console.log("Blog.remove Error");
+  } catch (/** @type {*} */ e) {
+    console.error("Blog.remove Error");
+
+    throw new Error(e);
   }
 };
 

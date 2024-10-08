@@ -9,12 +9,5 @@
     "outDir": "./dist",
     "resolveJsonModule": true
   },
-  "include": [
-    "./babel.config.cjs",
-    "./config-overrides.js",
-    "./coc_boot.js",
-    "./webpack.config.mjs",
-    "eslint.config.js",
-    "./cra"
-  ]
+  "include": ["coc_boot.js", "eslint.config.js"]
 }

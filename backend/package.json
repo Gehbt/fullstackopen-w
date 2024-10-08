@@ -1,9 +1,10 @@
 {
-  "name": "backend",
+  "name": "@fullstackopen-w/backend",
   "version": "0.0.0",
   "type": "module",
   "description": "",
-  "main": "index.js",
+  "main": "./index.js",
+  "module": "./index.js",
   "scripts": {
     "dev": "dotenvx run -q -f .env.local -- cross-env NODE_ENV=development nodemon",
     "start": "dotenvx run -q -f .env.local -- node index.js",

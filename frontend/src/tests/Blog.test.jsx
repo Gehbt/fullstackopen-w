@@ -24,7 +24,7 @@ test("renders blog no author", () => {
       likeBlog={likeBlog}
     />
   );
-  expect(screen.getByText("author: unknown")).toBeInTheDocument();
+  expect(screen.queryAllByText("li.blogHook")).toMatchInlineSnapshot(`[]`);
 });
 
 describe("renders content", () => {

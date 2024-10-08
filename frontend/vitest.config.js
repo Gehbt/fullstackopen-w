@@ -9,7 +9,7 @@ export default defineConfig({
     }),
   ],
   test: {
-    root: import.meta.dirname,
+    root: process.cwd(),
     environment: "jsdom",
     globals: true,
     setupFiles: "./src/setupTests.js",

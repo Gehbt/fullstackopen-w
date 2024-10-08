@@ -38,7 +38,7 @@ const create = async (newNote) => {
     };
     const response = await axios.post(baseUrl, newNote, tokenConfig);
     return response.data;
-  } catch (e) {
+  } catch (/** @type {*} */ e) {
     throw new Error("Note.create Error");
   }
 };
@@ -55,9 +55,9 @@ const update = async (id, newNote) => {
     };
     const response = await axios.put(`${baseUrl}/${id}`, newNote, tokenConfig);
     return response.data;
-  } catch (e) {
+  } catch (/** @type {*} */ e) {
     console.error(e);
-    throw e;
+    throw new Error(e);
   }
 };
 

@@ -35,7 +35,7 @@ const config =
     },
     devtool: "eval-cheap-source-map",
     output: {
-      path: path.resolve(process.cwd(), "new-build"),
+      path: path.resolve(process.cwd(), "wp-build"),
       filename: "js/main.[contenthash:8].js",
       publicPath: "/public",
       clean: true,
@@ -45,7 +45,7 @@ const config =
     },
 
     plugins: [
-      // new InterpolateHtmlPlugin(HtmlWebpackPlugin, "PUBLIC_URL"),
+      new InterpolateHtmlPlugin(HtmlWebpackPlugin, "PUBLIC_URL"),
       new HtmlWebpackPlugin({
         template: "./public/index.html",
         favicon: "./public/favicon.ico",

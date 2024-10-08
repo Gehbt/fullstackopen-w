@@ -47,14 +47,14 @@ const App = (props) => {
       /*#__PURE__*/ console.log("loginUser", loginUser);
       window.localStorage.setItem(
         "loggedNoteappUser",
-        JSON.stringify(loginUser)
+        JSON.stringify(loginUser ?? "")
       );
       noteService.setToken(loginUser.token);
       blogService.setToken(loginUser.token);
       setUser(loginUser);
-    } catch (e) {
+    } catch (/** @type {*} */ e) {
       setErrorMessage("Wrong credentials");
-      console.log("error: ", e);
+      console.error("error: " + e.message);
       window.setTimeout(() => {
         setErrorMessage(null);
       }, 5000);

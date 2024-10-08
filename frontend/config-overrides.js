@@ -10,6 +10,7 @@ import {
   addBabelPlugins,
   addWebpackModuleRule,
 } from "customize-cra";
+import Webpack from "webpack";
 import { launchEditorMiddleware } from "@react-dev-inspector/middleware";
 import { dirname, resolve } from "path";
 import { TsconfigPathsPlugin } from "tsconfig-paths-webpack-plugin";
@@ -75,7 +76,13 @@ export const webpack = override(
   //     extensions: [".js", ".jsx", ".mjs"],
   //   })
   // ),
-  // addWebpackPlugin(turbo_console()),
+  addWebpackPlugin(
+    new Webpack.ProgressPlugin((percentage, message, ...args) => {
+      // e.g. Output each progress message directly to the console:
+      console.log(percentage.toFixed(3), message, ...args);
+    })
+  ),
+  addWebpackPlugin(turbo_console()),
   // addWebpackPlugin(
   //   new StylexPlugin({
   //     filename: "styles.[contenthash].css",
@@ -103,7 +110,8 @@ export const webpack = override(
   // Number.parseInt(process.env.BUNDLE_VISUALIZE) === 1 && addBundleVisualizer()
 );
 export function babel(/** @type {babel_type.TransformOptions} */ config) {
-  config.plugins.push(addBabelPlugins(babel_preset.presets));
+  if (babel_preset.presets)
+    config.plugins?.push(addBabelPlugins(babel_preset.presets));
   return config;
 }
 // const kill = require("tree-kill");

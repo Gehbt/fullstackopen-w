@@ -1,31 +1,17 @@
 {
-  "extends": "@tsconfig/create-react-app/tsconfig.json",
   "references": [
     {
       "path": "./jsconfig.be.json"
     },
     {
       "path": "./jsconfig.dev-tool.json"
+    },
+    {
+      "path": "./jsconfig.fe.json"
+    },
+    {
+      "path": "./jsconfig.e2e.json"
     }
   ],
-  "compilerOptions": {
-    "module": "Preserve",
-    "moduleResolution": "Bundler",
-    "target": "ES2020",
-    "jsx": "react-jsx",
-    "allowImportingTsExtensions": true,
-    "allowJs": true,
-    "checkJs": true,
-    "strict": true,
-    "noEmit": true,
-    "esModuleInterop": true,
-    "isolatedModules": true,
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["src/*"]
-    },
-    "types": ["vitest/globals"]
-  },
-  "include": ["src", "__mocks__"],
-  "exclude": ["node_modules", "**/node_modules/*"]
+  "files": []
 }
