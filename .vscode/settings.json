@@ -47,5 +47,9 @@
   "eslint.workingDirectories": [
     "./src"
   ],
-  "eslint.format.enable": true
+  "eslint.format.enable": true,
+  "editor.tokenColorCustomizations": {
+    "comments": "",
+    "textMateRules": []
+  }
 }

@@ -27,7 +27,7 @@ if (!root) {
 createRoot(root).render(
   <StrictMode>
     <App style={appStyle.app} />
-    <Counter />
+    {/* <Counter /> */}
   </StrictMode>
 );
 

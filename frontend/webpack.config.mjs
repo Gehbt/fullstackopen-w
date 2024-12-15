@@ -1,7 +1,7 @@
 // @ts-check
 // ! fail to replace cra
 import webpack from "webpack";
-import path, { resolve } from "node:path";
+import { resolve } from "node:path";
 import { BundleAnalyzerPlugin } from "webpack-bundle-analyzer";
 import CopyPlugin from "copy-webpack-plugin";
 import HtmlWebpackPlugin from "html-webpack-plugin";
@@ -11,7 +11,7 @@ import { EsbuildPlugin } from "esbuild-loader";
 import { TsconfigPathsPlugin } from "tsconfig-paths-webpack-plugin";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import { InterpolateHtmlPlugin } from "./cra/InterpolateHtmlPlugin.js";
-
+import mergeConfig from "webpack-merge";
 const PublicDir = resolve(process.cwd(), "public");
 
 /**
@@ -28,22 +28,58 @@ const handler = (percentage, message, ...args) => {
  * */
 const config =
   // other webpack configuration module:
-  {
-    mode: "development",
-    entry: {
-      main: "./src/index.jsx",
-    },
-    devtool: "eval-cheap-source-map",
-    output: {
-      path: path.resolve(process.cwd(), "wp-build"),
-      filename: "js/main.[contenthash:8].js",
-      publicPath: "/public",
-      clean: true,
-      scriptType: "module",
-      sourceMapFilename: "js/[name].[id].js.map",
-      assetModuleFilename: "[name].[hash][ext]",
-    },
+  mergeConfig(
+    {
+      mode: "development",
+      entry: {
+        main: "./src/index.jsx",
+      },
+      devtool: "eval-cheap-source-map",
+      output: {
+        path: resolve(process.cwd(), "wp-build"),
+        filename: "js/main.[contenthash:8].js",
+        publicPath: "/public",
+        clean: true,
+        scriptType: "module",
+        sourceMapFilename: "js/[name].[id].js.map",
+        assetModuleFilename: "[name].[hash][ext]",
+      },
 
+      optimization: {
+        usedExports: true,
+        moduleIds: "deterministic",
+        sideEffects: true,
+      },
+      resolve: {
+        alias: {
+          // ignore files in the 'ignore' directory
+          [resolve("backend")]: false,
+          "@": resolve("src"),
+        },
+        extensions: [".js", ".css", ".jsx"],
+      },
+      // externals: nodeExternals({
+      //   allowlist: ["react", "react-dom"],
+      // }),
+      /**
+       * @type {import("webpack-dev-server").Configuration}
+       */
+      devServer: {
+        port: 7370,
+        static: ["public"],
+      },
+    },
+    definePlugin(),
+    defineLoader()
+  );
+
+export default config;
+
+/**
+ * @returns {webpack.Configuration}
+ */
+function definePlugin() {
+  return {
     plugins: [
       new InterpolateHtmlPlugin(HtmlWebpackPlugin, "PUBLIC_URL"),
       new HtmlWebpackPlugin({
@@ -113,19 +149,13 @@ const config =
         chunkFilename: "css/[name]-[id].css",
       }),
     ],
-    optimization: {
-      usedExports: true,
-      moduleIds: "deterministic",
-      sideEffects: true,
-    },
-    resolve: {
-      alias: {
-        // ignore files in the 'ignore' directory
-        [resolve("backend")]: false,
-        "@": resolve("src"),
-      },
-      extensions: [".js", ".css", ".jsx"],
-    },
+  };
+}
+/**
+ * @returns {webpack.Configuration}
+ */
+function defineLoader() {
+  return {
     module: {
       rules: [
         {
@@ -167,15 +197,5 @@ const config =
         },
       ],
     },
-    // externals: nodeExternals({
-    //   allowlist: ["react", "react-dom"],
-    // }),
-    /**
-     * @type {import("webpack-dev-server").Configuration}
-     */
-    devServer: {
-      port: 7370,
-      static: ["public"],
-    },
   };
-export default config;
+}

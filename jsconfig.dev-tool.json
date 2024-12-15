@@ -9,5 +9,5 @@
     "outDir": "./dist",
     "resolveJsonModule": true
   },
-  "include": ["coc_boot.js", "eslint.config.js"]
+  "files": ["cypress.config.mjs", "coc_boot.mjs", "eslint.config.mjs"]
 }
