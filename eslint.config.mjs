@@ -1,3 +1,4 @@
+// @ts-check
 // import eslint from "eslint";
 // import js from "@eslint/js";
 // import react from "eslint-plugin-react";
@@ -63,6 +64,7 @@
 // ];
 // export default configs;
 import { fixupConfigRules } from "@eslint/compat";
+import { defineConfig } from "eslint/config";
 import reactRefresh from "eslint-plugin-react-refresh";
 // import globals from "globals";
 import path from "node:path";
@@ -78,10 +80,8 @@ const compat = new FlatCompat({
   allConfig: js.configs.all,
 });
 
-/**
- * @type {eslint.Linter.FlatConfig[]}
- */
-export default [
+
+export default defineConfig(
   {
     ignores: [
       "**/dist",
@@ -146,4 +146,4 @@ export default [
       "no-unused-vars": "off",
     },
   },
-];
+)

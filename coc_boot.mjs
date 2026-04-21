@@ -6,12 +6,12 @@ concurrently(
   [
     {
       name: "FE",
-      command: "yarn:start",
+      command: "bun:start",
       prefixColor: "bgBlue.bold",
     },
     {
       name: "BE",
-      command: "yarn:start.be",
+      command: "bun:start.be",
       prefixColor: "bgMagenta.bold",
     },
   ],

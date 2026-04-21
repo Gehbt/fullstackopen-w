@@ -28,7 +28,7 @@
   "workbench.colorTheme": "One Dark Pro Mix",
   "oneDarkPro.editorTheme": "One Dark Pro Mix",
   "jest.rootPath": "./backend",
-  "typescript.tsdk": "node_modules\\typescript\\lib",
+  "js/ts.tsdk.path": "node_modules/typescript/lib",
   "jest.runMode": "on-demand",
   "explorer.fileNesting.enabled": true,
   "files.associations": {

@@ -1,12 +1,23 @@
 {
   "extends": "../jsconfig.e2e.json",
   "compilerOptions": {
-    "target": "es5",
-    "lib": ["es5", "dom"],
-    "types": ["cypress", "node"],
+    "target": "es2016",
+    "lib": [
+      "es2016",
+      "dom"
+    ],
+    "types": [
+      "cypress",
+      "node"
+    ],
     "allowJs": true,
     "noEmit": true
   },
-  "include": ["./**/*.ts", "e2e/**/*.js"],
-  "exclude": ["node_modules"]
+  "include": [
+    "./**/*.ts",
+    "e2e/**/*.js"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

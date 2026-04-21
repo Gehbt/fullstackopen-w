@@ -55,7 +55,7 @@ Cypress.Commands.add("createNote", ({ content, important }) => {
     method: "POST",
     body: { content, important },
     headers: {
-      Authorization: `bearer ${JSON.parse(localStorage.getItem("loggedNoteappUser")).token
+      Authorization: `bearer ${JSON.parse(localStorage.getItem("loggedNoteappUser") || "").token
         }`,
     },
   });

@@ -5,14 +5,16 @@
     "moduleResolution": "Bundler",
     "allowJs": true,
     "alwaysStrict": true,
-    "baseUrl": "./backend",
+    "rootDir": "./backend",
     "paths": {
       "~/*": [
         "./*"
       ]
     },
     "outDir": "./build",
-    "resolveJsonModule": true
+    "types": [
+      "node"
+    ]
   },
   "include": [
     "backend",
